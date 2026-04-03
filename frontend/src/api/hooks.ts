@@ -487,7 +487,7 @@ export function useAssets(siteId: string) {
 export function useAssetSummary(siteId: string | null) {
   return useQuery({
     queryKey: ['assets', 'summary', siteId],
-    queryFn: () => siteId ? apiClient.get<any>(`/assets/${siteId}/summary`) : apiClient.get<any>('/assets/consolidated/summary'),
+    queryFn: () => siteId ? apiClient.get<any>(`/assets/${siteId}/summary`) : apiClient.get<any>('/assets/summary/consolidated'),
   });
 }
 

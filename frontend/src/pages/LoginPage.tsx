@@ -6,7 +6,6 @@ import { z } from 'zod';
 import { useLogin } from '@/api/hooks';
 import { useAuthStore } from '@/store/authStore';
 import { useDashboardStore } from '@/store/dashboardStore';
-import { Button } from '@/components/ui/Button';
 import { useTranslation } from '@/i18n/useTranslation';
 import { LANGUAGES } from '@/i18n/translations';
 
@@ -47,110 +46,62 @@ export function LoginPage() {
       await loginMutation.mutateAsync(data);
       navigate(from, { replace: true });
     } catch {
-      // Error handled by mutation state
+      // handled by mutation state
     }
   };
 
   return (
-    <div className="relative flex min-h-screen overflow-hidden">
-      {/* Animated gradient background */}
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4">
+      {/* Background */}
       <div
         className="absolute inset-0 -z-10"
         style={{
-          background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 25%, #1e40af 50%, #7c3aed 75%, #1e3a5f 100%)',
-          backgroundSize: '400% 400%',
-          animation: 'gradientShift 15s ease infinite',
+          background: 'linear-gradient(140deg, #062033 0%, #0c3a5f 30%, #1a6fb5 55%, #3a9d6a 80%, #2d8a4e 100%)',
+          backgroundSize: '300% 300%',
+          animation: 'gradientShift 20s ease infinite',
         }}
       />
+      <div className="absolute inset-0 -z-10 opacity-20" style={{
+        background: 'radial-gradient(circle at 30% 20%, rgba(26,111,181,0.4) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(92,184,92,0.3) 0%, transparent 50%)',
+      }} />
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 -z-10 opacity-[0.03]" style={{
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+        backgroundSize: '60px 60px',
+      }} />
 
-      {/* Mesh gradient overlay */}
-      <div
-        className="absolute inset-0 -z-10 opacity-30"
-        style={{
-          background: 'radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.3) 0%, transparent 50%), radial-gradient(ellipse at 40% 80%, rgba(16,185,129,0.2) 0%, transparent 50%)',
-        }}
-      />
-
-      {/* Floating decorative orbs */}
-      <div className="absolute top-1/4 left-1/4 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl animate-float" />
-      <div className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-violet-500/10 blur-3xl animate-float" style={{ animationDelay: '3s' }} />
-      <div className="absolute top-1/2 right-1/3 h-48 w-48 rounded-full bg-cyan-500/10 blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
-
-      {/* Left panel: Branding */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 text-white animate-fade-in">
-        <div>
-          <img src="/logo.png" alt="ConsolidaSuite" className="h-10 w-auto brightness-0 invert opacity-90" />
+      {/* Card */}
+      <div className="w-full max-w-[440px] animate-scale-in" style={{ animationFillMode: 'backwards' }}>
+        {/* Logo - big and centered */}
+        <div className="mb-10 flex justify-center">
+          <img
+            src="/logo.png"
+            alt="ConsolidaSuite"
+            className="h-20 w-auto drop-shadow-[0_4px_24px_rgba(255,255,255,0.15)]"
+          />
         </div>
-        <div className="space-y-6 animate-slide-up" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
-          <h1 className="text-5xl font-bold leading-tight tracking-tight">
-            Consolidation<br />Suite
-          </h1>
-          <p className="text-lg text-white/60 max-w-md leading-relaxed">
-            Centralized financial reporting, KPI dashboards, and budget management
-            for multi-site organizations across Europe.
-          </p>
-          <div className="flex gap-8 text-sm text-white/40">
-            <div>
-              <div className="text-3xl font-bold text-white">50+</div>
-              <div className="mt-0.5">KPI Metrics</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-white">10+</div>
-              <div className="mt-0.5">Currencies</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-white">Real-time</div>
-              <div className="mt-0.5">Consolidation</div>
-            </div>
-          </div>
-        </div>
-        <div className="text-xs text-white/30">
-          Secure. Compliant. GDPR-ready.
-        </div>
-      </div>
 
-      {/* Right panel: Login form */}
-      <div className="flex w-full items-center justify-center px-8 lg:w-1/2">
-        <div
-          className="w-full max-w-md glass-card p-8 animate-scale-in"
-          style={{ animationDelay: '300ms', animationFillMode: 'backwards' }}
-        >
-          {/* Mobile logo */}
-          <div className="mb-8 lg:hidden">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 font-bold text-lg text-white shadow-lg shadow-blue-500/30">
-                IF
-              </div>
-              <span className="text-xl font-semibold text-white">ConsolidaSuite</span>
-            </div>
-          </div>
-
-          {/* Logo glow for desktop */}
-          <div className="hidden lg:block mb-8">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 font-bold text-xl text-white shadow-xl shadow-blue-500/30">
-              IF
-            </div>
-          </div>
-
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-white">
+        {/* Form card */}
+        <div className="rounded-3xl border border-white/[0.08] bg-white/[0.06] p-8 backdrop-blur-2xl shadow-[0_32px_64px_rgba(0,0,0,0.3)]">
+          <div className="mb-7">
+            <h1 className="text-[26px] font-bold text-white font-display tracking-tight">
               {t('login.welcome')}
-            </h2>
-            <p className="mt-2 text-sm text-white/50">
+            </h1>
+            <p className="mt-1.5 text-[14px] text-white/40">
               {t('login.subtitle')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
-              <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-2">
+              <label htmlFor="email" className="mb-2 block text-[11px] font-semibold uppercase tracking-widest text-white/40">
                 {t('login.email')}
               </label>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
-                className="block w-full rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-blue-400/50 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-200"
+                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.05] px-4 py-3 text-[14px] text-white placeholder:text-white/25 focus:border-white/20 focus:bg-white/[0.08] focus:outline-none focus:ring-0 transition-all duration-200"
                 placeholder="name@company.com"
                 {...register('email')}
               />
@@ -160,15 +111,15 @@ export function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-2">
+              <label htmlFor="password" className="mb-2 block text-[11px] font-semibold uppercase tracking-widest text-white/40">
                 {t('login.password')}
               </label>
               <input
                 id="password"
                 type="password"
                 autoComplete="current-password"
-                className="block w-full rounded-xl border border-white/10 bg-white/10 backdrop-blur-sm px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-blue-400/50 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-200"
-                placeholder="Enter your password"
+                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.05] px-4 py-3 text-[14px] text-white placeholder:text-white/25 focus:border-white/20 focus:bg-white/[0.08] focus:outline-none focus:ring-0 transition-all duration-200"
+                placeholder="••••••••"
                 {...register('password')}
               />
               {errors.password && (
@@ -177,7 +128,7 @@ export function LoginPage() {
             </div>
 
             {loginMutation.isError && (
-              <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-3.5">
+              <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
                 <p className="text-sm text-red-300">
                   {loginMutation.error instanceof Error
                     ? loginMutation.error.message
@@ -186,37 +137,47 @@ export function LoginPage() {
               </div>
             )}
 
-            <Button
+            <button
               type="submit"
-              className="w-full !rounded-xl !py-3 !text-sm !font-semibold shadow-xl shadow-blue-500/25"
-              size="lg"
-              loading={loginMutation.isPending}
+              disabled={loginMutation.isPending}
+              className="w-full rounded-xl bg-gradient-to-r from-[#1a6fb5] to-[#3a9d6a] py-3.5 text-[14px] font-semibold text-white shadow-lg shadow-[#1a6fb5]/20 transition-all duration-200 hover:shadow-xl hover:shadow-[#1a6fb5]/30 hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
             >
-              {t('login.signIn')}
-            </Button>
+              {loginMutation.isPending ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  ...
+                </span>
+              ) : (
+                t('login.signIn')
+              )}
+            </button>
           </form>
-
-          <p className="mt-8 text-center text-xs text-white/30">
-            {t('login.secureNote')}
-          </p>
-
-          {/* Language selector */}
-          <div className="mt-6 flex justify-center gap-2">
-            {LANGUAGES.map((lang) => (
-              <button
-                key={lang.code}
-                onClick={() => setLanguage(lang.code)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
-                  currentLang === lang.code
-                    ? 'bg-white/20 text-white'
-                    : 'text-white/40 hover:text-white/70 hover:bg-white/10'
-                }`}
-              >
-                {lang.flag} {lang.label}
-              </button>
-            ))}
-          </div>
         </div>
+
+        {/* Language switcher - clean, below the card */}
+        <div className="mt-8 flex items-center justify-center gap-1">
+          {LANGUAGES.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => setLanguage(lang.code)}
+              className={`rounded-lg px-3 py-2 text-[13px] font-medium transition-all duration-200 ${
+                currentLang === lang.code
+                  ? 'bg-white/15 text-white'
+                  : 'text-white/30 hover:text-white/60 hover:bg-white/5'
+              }`}
+            >
+              {lang.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <p className="mt-6 text-center text-[11px] text-white/20">
+          {t('login.footerNote')}
+        </p>
       </div>
 
       <style>{`

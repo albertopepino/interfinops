@@ -271,7 +271,7 @@ async def asset_summary(
     )
 
 
-@router.get("/consolidated/summary", response_model=ConsolidatedAssetSummaryResponse)
+@router.get("/summary/consolidated", response_model=ConsolidatedAssetSummaryResponse)
 async def consolidated_asset_summary(
     db: DbSession,
     current_user: CurrentUser,

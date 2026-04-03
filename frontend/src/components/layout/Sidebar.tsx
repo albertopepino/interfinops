@@ -121,7 +121,7 @@ function NavItemLink({ item }: { item: NavItem }) {
         cn(
           'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition-all duration-200',
           isActive
-            ? 'bg-gradient-to-r from-blue-500/20 to-blue-400/5 text-white'
+            ? 'bg-gradient-to-r from-brand-500/20 to-brand-400/5 text-white'
             : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
         )
       }
@@ -132,7 +132,7 @@ function NavItemLink({ item }: { item: NavItem }) {
             className={cn(
               'flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-200',
               isActive
-                ? 'bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.5)]'
+                ? 'bg-brand-500 shadow-[0_0_12px_rgba(26,111,181,0.5)]'
                 : 'bg-white/[0.05] group-hover:bg-white/[0.08]'
             )}
           >
@@ -169,11 +169,11 @@ export function Sidebar() {
   return (
     <aside className="flex w-[220px] flex-col h-screen sticky top-0 bg-[#0f1629] text-white">
       {/* Logo */}
-      <div className="flex items-center justify-center px-4 pt-5 pb-5">
+      <div className="flex items-center justify-center px-4 pt-6 pb-6">
         <img
           src="/logo.png"
           alt="ConsolidaSuite"
-          className="h-9 w-auto brightness-0 invert opacity-90"
+          className="h-8 w-auto brightness-0 invert"
         />
       </div>
 

@@ -453,6 +453,15 @@ async def _build_headcount(db: DbSession, site_id: uuid.UUID | None, site_name: 
     )
 
 
+@router.get("/headcount/consolidated", response_model=HeadcountSummary)
+async def get_consolidated_headcount(
+    db: DbSession,
+    current_user: CurrentUser,
+) -> HeadcountSummary:
+    """Consolidated headcount across all sites."""
+    return await _build_headcount(db, None, "All Sites")
+
+
 @router.get("/headcount/{site_id}", response_model=HeadcountSummary)
 async def get_headcount(
     site_id: uuid.UUID,
@@ -468,15 +477,6 @@ async def get_headcount(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Site not found")
 
     return await _build_headcount(db, site_id, site.name)
-
-
-@router.get("/headcount/consolidated", response_model=HeadcountSummary)
-async def get_consolidated_headcount(
-    db: DbSession,
-    current_user: CurrentUser,
-) -> HeadcountSummary:
-    """Consolidated headcount across all sites."""
-    return await _build_headcount(db, None, "All Sites")
 
 
 # ---------------------------------------------------------------------------
@@ -570,19 +570,6 @@ async def _build_payroll_summary(
     )
 
 
-@router.get("/payroll/{site_id}", response_model=SalarySummary)
-async def get_payroll_summary(
-    site_id: uuid.UUID,
-    db: DbSession,
-    current_user: CurrentUser,
-    year: int = Query(ge=2000, le=2100),
-    month: int = Query(ge=1, le=12),
-) -> SalarySummary:
-    """Payroll summary for a site/period (totals by department)."""
-    await require_site_access(site_id, current_user)
-    return await _build_payroll_summary(db, site_id, year, month)
-
-
 @router.get("/payroll/consolidated", response_model=ConsolidatedPayrollSummary)
 async def get_consolidated_payroll(
     db: DbSession,
@@ -658,6 +645,19 @@ async def get_consolidated_payroll(
         grand_total_cost_eur=grand_total_cost,
         grand_total_employees=grand_total_employees,
     )
+
+
+@router.get("/payroll/{site_id}", response_model=SalarySummary)
+async def get_payroll_summary(
+    site_id: uuid.UUID,
+    db: DbSession,
+    current_user: CurrentUser,
+    year: int = Query(ge=2000, le=2100),
+    month: int = Query(ge=1, le=12),
+) -> SalarySummary:
+    """Payroll summary for a site/period (totals by department)."""
+    await require_site_access(site_id, current_user)
+    return await _build_payroll_summary(db, site_id, year, month)
 
 
 __all__ = ["router"]
