@@ -1,0 +1,50 @@
+.git
+.gitignore
+.env
+.env.*
+
+# Python
+__pycache__
+*.py[cod]
+.venv
+venv
+.pytest_cache
+.mypy_cache
+.coverage
+htmlcov
+
+# Node
+node_modules
+.npm
+.eslintcache
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Docker
+postgres_data
+docker-compose*.yml
+
+# Docs
+*.md
+LICENSE
+
+# Backups
+backups
+*.sql.gz
+
+# SSL
+*.pem
+*.key
+*.crt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs

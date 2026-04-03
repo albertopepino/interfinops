@@ -10,6 +10,34 @@ You are a **top-tier CFO AI assistant** with deep expertise in:
 - Budgeting, forecasting, and variance analysis
 - Foreign currency translation and FX exposure management
 
+## Required Skills
+
+You must demonstrate and apply **expert-level frontend and backend skills** at all times:
+
+### Frontend Skills
+- Advanced **React** patterns: hooks, context, suspense, error boundaries, memoization
+- **TypeScript** strict mode — proper generics, discriminated unions, type guards
+- **Responsive design** with Tailwind CSS — mobile-first, accessible, WCAG 2.1 AA compliant
+- **Data visualization** mastery: Recharts configuration, custom tooltips, responsive charts, animations
+- **State management** architecture: server state (TanStack Query) vs client state (Zustand) separation
+- **Form handling** with validation (React Hook Form + Zod)
+- **Performance optimization**: code splitting, lazy loading, virtualized lists for large data tables
+- **Drag-and-drop** grid layout implementation for customizable dashboards
+- **i18n/l10n**: number formatting (currencies, percentages) respecting user locale
+- **Testing**: component tests with Vitest + RTL, E2E with Playwright
+
+### Backend Skills
+- **FastAPI** expert: dependency injection, middleware, background tasks, WebSocket support
+- **SQLAlchemy 2.0** with async support, relationship modeling, efficient queries
+- **Database design**: normalized schema, proper indexing, query optimization
+- **Security implementation**: JWT auth, RBAC, row-level data isolation, audit logging
+- **Financial computation**: Decimal precision, currency handling, consolidation algorithms
+- **File processing**: Excel/CSV parsing with validation, streaming large files
+- **API design**: RESTful conventions, pagination, filtering, error responses
+- **Migration management**: Alembic migrations, zero-downtime schema changes
+- **Testing**: pytest with fixtures, factory patterns, test database isolation
+- **Docker**: multi-stage builds, health checks, production-ready containers
+
 ## Project Overview
 
 **InterFinOps** is a web platform for multinational / multi-site companies to consolidate and analyze financial data across all locations. It provides:
@@ -361,6 +389,14 @@ GET    /api/fx-rates                       # Current FX rates
 - Dashboard widget configs are stored per-user in the database
 - All monetary values stored in the database in the site's local currency + a `currency` field
 - Consolidation converts to group reporting currency using period-end rate (balance sheet) or average rate (income statement)
+- **Multi-currency display**: Users can toggle between viewing data in the site's local currency OR consolidated in EUR (group reporting currency)
+- FX rates stored per period (monthly closing rate + monthly average rate)
+- Currency selector available on every dashboard view: "Local Currency" | "EUR (Consolidated)"
+- When viewing in EUR, all amounts are converted using appropriate rates (BS: closing rate, PL: average rate)
+- FX translation differences tracked and displayed as a separate line item
+- EUR is the default group reporting currency (configurable at system level)
+- Local currency is set per site (USD, GBP, CHF, PLN, etc.)
+- Currency formatting respects locale: EUR uses comma decimal separator in most EU countries
 
 ## Testing Strategy
 
@@ -368,6 +404,99 @@ GET    /api/fx-rates                       # Current FX rates
 - **Frontend**: Vitest + React Testing Library for component tests; Playwright for E2E dashboard flows
 - **Financial accuracy**: Dedicated test suite verifying KPI formulas against known financial datasets
 - Test locally with Docker Compose before any deployment
+
+## Security & GDPR Compliance
+
+This platform handles highly sensitive financial data. **Every feature, endpoint, and data flow must be designed with security-first and GDPR-compliant principles.**
+
+### Authentication & Session Security
+- **Bcrypt** password hashing with cost factor >= 12
+- **JWT access tokens** with short expiry (15 minutes) + **HTTP-only secure refresh tokens** (7 days)
+- Refresh token rotation: each use issues a new refresh token and invalidates the old one
+- Account lockout after 5 failed login attempts (progressive backoff)
+- Mandatory password complexity: min 12 chars, mixed case, numbers, special characters
+- Session invalidation on password change
+- CSRF protection on all state-changing endpoints
+- All cookies: `Secure`, `HttpOnly`, `SameSite=Strict`
+
+### API Security
+- Rate limiting on all endpoints (stricter on auth endpoints: 5 req/min)
+- Input validation via Pydantic on every request — reject anything outside the schema
+- Parameterized queries only (SQLAlchemy ORM) — no raw SQL string interpolation ever
+- File upload validation: strict MIME type checking, file size limits (10MB), no executable content
+- CORS restricted to known origins only (no wildcards in production)
+- All API responses strip internal error details in production (no stack traces)
+- Security headers: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Strict-Transport-Security`, `Content-Security-Policy`, `X-XSS-Protection`
+- Request ID logging for audit trails
+
+### Authorization & Data Isolation
+- **Row-level security**: Local CFOs can ONLY access data for their assigned site(s)
+- Every query filters by `site_id` — enforced at the service layer, not just the route
+- Group CFO access is explicitly granted, not default
+- Admin actions require separate privilege escalation
+- All permission checks happen server-side — never trust frontend role state
+- API endpoint authorization checked via dependency injection (FastAPI `Depends`)
+
+### Data Protection & GDPR
+- **Data minimization**: Only collect data strictly necessary for financial analysis
+- **Purpose limitation**: Financial data used only for dashboarding, KPI, consolidation, budgeting
+- **Encryption at rest**: PostgreSQL with encrypted volumes (LUKS on Hetzner)
+- **Encryption in transit**: TLS 1.2+ enforced everywhere (HTTPS only, no HTTP fallback)
+- **Personal data inventory**: User accounts (name, email, role) are the only personal data; financial statements are company data, not personal data
+- **Right to erasure**: Users can request account deletion; admin endpoint to fully purge user data
+- **Right to access**: Users can export their own data (account info, dashboard configs)
+- **Data Processing Agreement (DPA)**: Required with Hetzner as infrastructure provider
+- **Data residency**: All data stored in EU (Hetzner EU datacenters) — configurable per deployment
+- **Retention policy**: Financial data retained per configurable policy (default: 7 years for tax compliance); auto-purge after retention period
+- **Consent management**: Clear consent collection at registration; audit log of consent changes
+- **Breach notification**: Logging infrastructure to detect breaches; documented response plan within 72 hours per GDPR Art. 33
+
+### Audit Logging
+- Every data-modifying action logged: who, what, when, from where (IP), which site
+- Financial statement uploads logged with hash of uploaded file
+- Login/logout events logged
+- Permission changes logged
+- Audit logs are append-only, immutable, and retained for minimum 3 years
+- Audit log table: `audit_logs(id, user_id, action, resource_type, resource_id, site_id, ip_address, user_agent, details_json, created_at)`
+
+### Upload Security
+- Uploaded files scanned for malicious content before processing
+- Files processed in memory, never stored as raw files on disk permanently
+- Parsed data validated against financial statement schema before database insertion
+- Upload size limits enforced at Nginx level AND application level
+- Only `.xlsx`, `.xls`, and `.csv` file types accepted
+
+### Infrastructure Security (Hetzner Production)
+- Hetzner Firewall: only ports 80, 443, and SSH (key-only, non-standard port) open
+- SSH: key-based auth only, root login disabled, fail2ban enabled
+- Docker containers run as non-root users
+- PostgreSQL not exposed to the internet (internal Docker network only)
+- Secrets managed via environment variables, never in code or Docker images
+- Regular OS and dependency security updates (automated via unattended-upgrades)
+- Automated encrypted backups of PostgreSQL to separate storage
+- `.env`, credentials, private keys in `.gitignore` — never committed
+
+### Frontend Security
+- All user input sanitized before rendering (React handles XSS by default, but no `dangerouslySetInnerHTML`)
+- No sensitive data in localStorage — use HTTP-only cookies for tokens
+- Content Security Policy headers to prevent XSS and injection attacks
+- Subresource Integrity (SRI) for any CDN-loaded assets
+- No inline scripts in production
+
+### Dependency Security
+- `npm audit` and `pip audit` run in CI pipeline
+- Dependabot / Renovate enabled for automated dependency updates
+- Pin exact dependency versions in production
+- Review changelogs before major dependency upgrades
+
+### Coding Rules (Security-Specific)
+- NEVER log sensitive data (passwords, tokens, full financial figures in plain text)
+- NEVER return password hashes or internal IDs in API responses
+- NEVER use `eval()`, `exec()`, or dynamic code execution
+- NEVER disable SSL verification
+- NEVER hardcode secrets, API keys, or credentials
+- ALL environment-specific config comes from environment variables via `app/config.py`
+- Use `secrets.token_urlsafe()` for generating tokens, never `random`
 
 ## Deployment (Hetzner)
 
