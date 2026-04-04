@@ -145,7 +145,7 @@ export function DashboardPage() {
       {/* Page Header */}
       <div className="flex items-end justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
             {t('dashboard.title')}
           </h1>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -181,7 +181,7 @@ export function DashboardPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">{t('dashboard.customize')}</h2>
+              <h2 className="text-lg font-semibold font-display text-slate-900 dark:text-white">{t('dashboard.customize')}</h2>
               <button
                 onClick={() => setShowCustomize(false)}
                 className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-100/60 hover:text-slate-600 dark:hover:bg-slate-700/50 dark:hover:text-slate-300 transition-all duration-150"
@@ -195,7 +195,7 @@ export function DashboardPage() {
             <div className="space-y-6">
               {/* KPI Cards Section */}
               <div>
-                <h3 className="label">
+                <h3 className="label font-display">
                   {t('dashboard.kpiCards')}
                 </h3>
                 <div className="grid grid-cols-2 gap-2">
@@ -218,7 +218,7 @@ export function DashboardPage() {
 
               {/* Chart Widgets Section */}
               <div>
-                <h3 className="label">
+                <h3 className="label font-display">
                   {t('dashboard.chartWidgets')}
                 </h3>
                 <div className="grid grid-cols-2 gap-2">
@@ -294,7 +294,7 @@ export function DashboardPage() {
 
       {/* Chart Widgets */}
       <div>
-        <h2 className="mb-4 text-lg font-semibold text-slate-800 dark:text-slate-200">
+        <h2 className="mb-4 text-lg font-semibold font-display text-slate-800 dark:text-slate-200">
           {t('dashboard.performanceOverview')}
         </h2>
         <DashboardGrid />

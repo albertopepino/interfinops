@@ -26,7 +26,7 @@ function ChartCard({ title, subtitle, children, className = '' }: {
     <div className={`glass-card overflow-hidden ${className}`}>
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200/30 dark:border-slate-700/20">
         <div className="flex items-baseline gap-2">
-          <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-200">{title}</h3>
+          <h3 className="text-sm font-semibold font-display text-slate-800 dark:text-slate-200">{title}</h3>
           {subtitle && (
             <span className="text-[11px] text-slate-400 dark:text-slate-500">{subtitle}</span>
           )}

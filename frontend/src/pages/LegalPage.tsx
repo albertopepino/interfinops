@@ -15,16 +15,24 @@ const ENTITY_TYPE_COLORS: Record<string, string> = {
 };
 
 const AUDIT_STATUS_COLORS: Record<string, string> = {
-  completed: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+  not_started: 'bg-slate-500/10 text-slate-600 dark:text-slate-400',
   in_progress: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+  draft_report: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+  final_report: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+  filed: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+  completed: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
   scheduled: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
   overdue: 'bg-red-500/10 text-red-600 dark:text-red-400',
   pending: 'bg-slate-500/10 text-slate-600 dark:text-slate-400',
 };
 
 const AUDIT_DOT_COLORS: Record<string, string> = {
-  completed: 'bg-emerald-500',
+  not_started: 'bg-slate-400',
   in_progress: 'bg-blue-500',
+  draft_report: 'bg-amber-500',
+  final_report: 'bg-emerald-500',
+  filed: 'bg-emerald-500',
+  completed: 'bg-emerald-500',
   scheduled: 'bg-amber-500',
   overdue: 'bg-red-500',
   pending: 'bg-slate-400',
@@ -89,7 +97,7 @@ function EntitiesTab() {
   return (
     <div className="glass-card overflow-hidden animate-in">
       <div className="border-b border-white/10 px-6 py-4">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('legal.entities')}</h2>
+        <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('legal.entities')}</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -138,7 +146,7 @@ function DirectorsTab() {
       {entitiesWithDirectors.map((entity: any, idx: number) => (
         <div key={entity.id || idx} className="glass-card overflow-hidden">
           <div className="border-b border-white/10 px-6 py-4">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">{entity.name || entity.entity_name}</h3>
+            <h3 className="text-base font-bold font-display text-slate-900 dark:text-white">{entity.name || entity.entity_name}</h3>
             <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{entity.jurisdiction || entity.country}</p>
           </div>
           <div className="overflow-x-auto">
@@ -179,7 +187,7 @@ function AuditsTab() {
   return (
     <div className="glass-card overflow-hidden animate-in">
       <div className="border-b border-white/10 px-6 py-4">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('legal.audits')}</h2>
+        <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('legal.audits')}</h2>
         <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">{selectedYear}</p>
       </div>
       <div className="overflow-x-auto">
@@ -223,7 +231,7 @@ export function LegalPage() {
   return (
     <div className="space-y-6 animate-in">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
           {t('legal.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">

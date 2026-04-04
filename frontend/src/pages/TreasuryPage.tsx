@@ -92,7 +92,7 @@ function CashPositionTab({ siteId, date }: { siteId: string | null; date: string
         {summaryCards.map((card, i) => (
           <div key={i} className="glass-card p-5">
             <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">{card.label}</p>
-            <p className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">{formatAmount(card.value)}</p>
+            <p className="mt-2 text-2xl font-bold font-display text-slate-900 dark:text-white"><span className="font-mono tabular-nums">{formatAmount(card.value)}</span></p>
           </div>
         ))}
       </div>
@@ -103,7 +103,7 @@ function CashPositionTab({ siteId, date }: { siteId: string | null; date: string
       ) : (
         <div className="glass-card overflow-hidden animate-in">
           <div className="border-b border-white/10 px-6 py-4">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('treasury.bankAccounts')}</h2>
+            <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('treasury.bankAccounts')}</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -121,7 +121,7 @@ function CashPositionTab({ siteId, date }: { siteId: string | null; date: string
                 {accounts.map((acc: any, idx: number) => (
                   <tr key={acc.id || idx} className="border-b border-slate-100/40 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20 transition-colors duration-150">
                     <td className="px-6 py-3 text-sm font-medium text-slate-700 dark:text-slate-300">{acc.bank_name || acc.bank}</td>
-                    <td className="px-6 py-3 text-sm font-mono text-slate-500 dark:text-slate-400">{acc.account_number || acc.iban || '-'}</td>
+                    <td className="px-6 py-3 text-sm font-mono tracking-widest text-slate-500 dark:text-slate-400">{acc.account_number || acc.iban || '-'}</td>
                     <td className="px-6 py-3 text-sm text-slate-500 dark:text-slate-400">{acc.account_type || acc.type || '-'}</td>
                     <td className="px-6 py-3 text-sm text-slate-500 dark:text-slate-400">{acc.currency || 'EUR'}</td>
                     <td className="px-6 py-3 text-sm text-right font-mono tabular-nums text-slate-700 dark:text-slate-300">{formatAmount(acc.balance ?? 0)}</td>
@@ -159,8 +159,8 @@ function DebtProfileTab() {
           ].map((card, i) => (
             <div key={i} className="glass-card p-5">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">{card.label}</p>
-              <p className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
-                {card.raw ? card.value : formatAmount(card.value as number)}
+              <p className="mt-2 text-2xl font-bold font-display text-slate-900 dark:text-white">
+                <span className="font-mono tabular-nums">{card.raw ? card.value : formatAmount(card.value as number)}</span>
               </p>
             </div>
           ))}
@@ -173,7 +173,7 @@ function DebtProfileTab() {
       ) : (
         <div className="glass-card overflow-hidden animate-in">
           <div className="border-b border-white/10 px-6 py-4">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('treasury.debtInstruments')}</h2>
+            <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('treasury.debtInstruments')}</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -230,7 +230,7 @@ export function TreasuryPage() {
   return (
     <div className="space-y-6 animate-in">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
           {t('treasury.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{siteName}</p>

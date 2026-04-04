@@ -23,10 +23,9 @@ export function Card({
   return (
     <div
       className={cn(
-        'rounded-lg border bg-white dark:bg-slate-800 dark:border-slate-700',
-        variant === 'default' && 'shadow-card',
+        'glass-card',
         variant === 'elevated' && 'shadow-card-hover',
-        variant === 'outlined' && 'shadow-none',
+        variant === 'outlined' && 'shadow-none border-dashed',
         paddingClasses[padding],
         className
       )}
@@ -60,7 +59,7 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        'text-sm font-semibold text-slate-700 dark:text-slate-200',
+        'text-sm font-semibold font-display text-slate-700 dark:text-slate-200',
         className
       )}
       {...props}

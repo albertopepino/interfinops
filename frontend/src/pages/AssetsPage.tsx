@@ -7,8 +7,8 @@ import { useTranslation } from '@/i18n/useTranslation';
 const CATEGORY_COLORS: Record<string, string> = {
   'buildings': 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
   'machinery': 'bg-violet-500/10 text-violet-600 dark:text-violet-400',
-  'vehicles': 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-  'furniture': 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+  'vehicles': 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+  'furniture': 'bg-slate-500/10 text-slate-600 dark:text-slate-400',
   'it_equipment': 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400',
   'land': 'bg-green-500/10 text-green-600 dark:text-green-400',
   'intangible': 'bg-pink-500/10 text-pink-600 dark:text-pink-400',
@@ -109,7 +109,7 @@ export function AssetsPage() {
   if (isLoading) return (
     <div className="space-y-6 animate-in">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">{t('assets.title')}</h1>
+        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">{t('assets.title')}</h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{siteName}</p>
       </div>
       <LoadingSkeleton />
@@ -130,8 +130,8 @@ export function AssetsPage() {
         {summaryCards.map((card, i) => (
           <div key={i} className="glass-card p-5" style={{ animationDelay: `${i * 50}ms` }}>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">{card.label}</p>
-            <p className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
-              {card.isCurrency ? formatAmount(card.value) : card.value}
+            <p className="mt-2 text-2xl font-bold font-display text-slate-900 dark:text-white">
+              {card.isCurrency ? (<span className="font-mono tabular-nums">{formatAmount(card.value)}</span>) : card.value}
             </p>
           </div>
         ))}
@@ -143,7 +143,7 @@ export function AssetsPage() {
       ) : (
         <div className="glass-card overflow-hidden animate-in">
           <div className="border-b border-white/10 px-6 py-4">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('assets.register')}</h2>
+            <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('assets.register')}</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -159,7 +159,7 @@ export function AssetsPage() {
               </thead>
               <tbody>
                 {items.map((asset: any, idx: number) => (
-                  <tr key={asset.id || idx} className="border-b border-slate-100/40 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20 transition-colors duration-150">
+                  <tr key={asset.id || idx} className="border-b border-slate-100/40 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20 transition-colors duration-150 opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]" style={{ animationDelay: `${idx * 40}ms`, animationFillMode: 'backwards' }}>
                     <td className="px-6 py-3 text-sm font-mono text-slate-600 dark:text-slate-400">{asset.asset_code || asset.code}</td>
                     <td className="px-6 py-3 text-sm font-medium text-slate-700 dark:text-slate-300">{asset.name || asset.description}</td>
                     <td className="px-6 py-3"><CategoryBadge category={asset.category || '-'} /></td>
