@@ -26,7 +26,7 @@ function StatusBadge({ status }: { status: string }) {
   const dot = FILING_DOT_COLORS[s] || 'bg-slate-400';
   return (
     <span className={cn(pill, 'inline-flex items-center gap-1.5')}>
-      <span className={cn('h-1.5 w-1.5 rounded-full', dot, s === 'overdue' && 'animate-pulse-soft')} />
+      <span className={cn('h-1.5 w-1.5 rounded-full', dot, s === 'overdue' && 'animate-pulse')} />
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
   );
@@ -34,7 +34,7 @@ function StatusBadge({ status }: { status: string }) {
 
 function LoadingSkeleton() {
   return (
-    <div className="glass-card overflow-hidden">
+    <div className="card overflow-hidden">
       <div className="p-6 space-y-3">
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="flex justify-between">
@@ -49,7 +49,7 @@ function LoadingSkeleton() {
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="glass-card p-12 text-center">
+    <div className="card p-12 text-center">
       <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-500/10">
         <svg className="h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
@@ -83,9 +83,9 @@ function TaxRatesTab() {
   if (items.length === 0) return <EmptyState message={t('common.noData')} />;
 
   return (
-    <div className="glass-card overflow-hidden">
-      <div className="border-b border-white/10 px-6 py-4">
-        <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('tax.jurisdictions')}</h2>
+    <div className="card overflow-hidden">
+      <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+        <h2 className="text-base font-semibold text-slate-900 dark:text-white">{t('tax.jurisdictions')}</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -100,7 +100,7 @@ function TaxRatesTab() {
           </thead>
           <tbody>
             {items.map((j: any, idx: number) => (
-              <tr key={j.id || idx} className="border-b border-slate-100/40 transition-colors duration-150 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20">
+              <tr key={j.id || idx} className="border-b border-slate-100/40 transition-colors duration-150 hover:bg-slate-50 dark:border-slate-700/20 dark:hover:bg-slate-700/20">
                 <td className="px-6 py-3 text-sm font-medium text-slate-700 dark:text-slate-300">{j.jurisdiction || j.country}</td>
                 <td className="px-6 py-3 text-sm text-slate-500 dark:text-slate-400">{j.site_name || j.site_id || '-'}</td>
                 <td className="px-6 py-3 text-sm text-right font-mono tabular-nums text-slate-700 dark:text-slate-300">{formatPercent(j.corporate_tax_rate)}</td>
@@ -126,7 +126,7 @@ function FilingsTab() {
   const items = data?.items ?? [];
 
   return (
-    <div className="space-y-4 stagger-children">
+    <div className="space-y-4 ">
       {/* Overview cards */}
       {overview && (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -136,9 +136,9 @@ function FilingsTab() {
             { label: t('tax.pending'), value: overview.pending ?? 0 },
             { label: t('tax.overdue'), value: overview.overdue ?? 0, isAlert: (overview.overdue ?? 0) > 0 },
           ].map((card, i) => (
-            <div key={i} className="glass-card p-5">
+            <div key={i} className="card p-5">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">{card.label}</p>
-              <p className={cn('mt-2 text-2xl font-bold font-display font-mono tabular-nums', card.isAlert ? 'text-red-500' : 'text-slate-900 dark:text-white')}>
+              <p className={cn('mt-2 text-2xl font-bold font-mono tabular-nums', card.isAlert ? 'text-red-500' : 'text-slate-900 dark:text-white')}>
                 {card.value}
               </p>
             </div>
@@ -147,9 +147,9 @@ function FilingsTab() {
       )}
 
       {/* Filings table */}
-      <div className="glass-card overflow-hidden">
-        <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('tax.filings')}</h2>
+      <div className="card overflow-hidden">
+        <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between">
+          <h2 className="text-base font-semibold text-slate-900 dark:text-white">{t('tax.filings')}</h2>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -182,7 +182,7 @@ function FilingsTab() {
                   const overdue = f.status?.toLowerCase() !== 'filed' && isOverdue(f.due_date);
                   const displayStatus = overdue ? 'overdue' : f.status;
                   return (
-                    <tr key={f.id || idx} className="border-b border-slate-100/40 transition-colors duration-150 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20">
+                    <tr key={f.id || idx} className="border-b border-slate-100/40 transition-colors duration-150 hover:bg-slate-50 dark:border-slate-700/20 dark:hover:bg-slate-700/20">
                       <td className="px-6 py-3 text-sm font-medium text-slate-700 dark:text-slate-300">{f.filing_type || f.type || '-'}</td>
                       <td className="px-6 py-3 text-sm text-slate-500 dark:text-slate-400">{f.jurisdiction || f.country || '-'}</td>
                       <td className="px-6 py-3 text-sm text-slate-500 dark:text-slate-400">{f.site_name || f.site_id || '-'}</td>
@@ -214,7 +214,7 @@ export function TaxPage() {
   return (
     <div className="page-enter space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
           {t('tax.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -222,21 +222,15 @@ export function TaxPage() {
         </p>
       </div>
 
-      <div className="segmented-control">
+      <div className="flex gap-6 border-b border-slate-200 mb-6">
         {TAB_DEFS.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={cn(
-              'inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all duration-200',
-              activeTab === tab.key
-                ? 'bg-white text-slate-900 shadow-sm dark:bg-slate-700 dark:text-white'
-                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+            className={cn('pb-3 text-sm font-medium border-b-2 -mb-px transition-colors',
+              activeTab === tab.key ? 'border-brand-500 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700'
             )}
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={tab.icon} />
-            </svg>
             {t(tab.labelKey)}
           </button>
         ))}

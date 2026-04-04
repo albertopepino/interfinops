@@ -23,7 +23,7 @@ export function WidgetWrapper({
   return (
     <div
       className={cn(
-        'flex h-full flex-col glass-card',
+        'flex h-full flex-col card',
         'hover:shadow-card-hover',
         className
       )}

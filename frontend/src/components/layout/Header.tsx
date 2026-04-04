@@ -31,14 +31,14 @@ export function Header() {
   }));
 
   return (
-    <header className="glass sticky top-0 z-30 flex h-14 items-center justify-between px-6">
+    <header className="bg-white border-b border-slate-200 h-14 sticky top-0 z-30 flex items-center justify-between px-6">
       {/* Left: Site + Period selectors */}
       <div className="flex items-center gap-3">
         {(role === 'group_cfo' || role === 'admin') && sites && sites.length > 0 && (
           <select
             value={selectedSiteId || ''}
             onChange={(e) => setSelectedSite(e.target.value)}
-            className="h-8 rounded-lg border border-slate-200/60 bg-white/60 px-3 text-sm font-medium text-slate-700 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/10 dark:border-slate-600/40 dark:bg-slate-800/60 dark:text-slate-300"
+            className="input h-8 w-auto px-2 text-sm"
           >
             <option value="">{t('common.consolidated')}</option>
             {sites.map((s) => (
@@ -47,13 +47,13 @@ export function Header() {
           </select>
         )}
 
-        <div className="h-4 w-px bg-slate-200/60 dark:bg-slate-700/60" />
+        <div className="h-4 w-px bg-slate-200" />
 
         <div className="flex items-center gap-1.5">
           <select
             value={selectedYear}
             onChange={(e) => setSelectedPeriod(Number(e.target.value), selectedMonth)}
-            className="h-8 rounded-lg border border-slate-200/60 bg-white/60 px-2 text-sm font-medium text-slate-700 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/10 dark:border-slate-600/40 dark:bg-slate-800/60 dark:text-slate-300"
+            className="input h-8 w-auto px-2 text-sm"
           >
             {yearOptions.map((y) => (
               <option key={y} value={y}>{y}</option>
@@ -62,7 +62,7 @@ export function Header() {
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedPeriod(selectedYear, Number(e.target.value))}
-            className="h-8 rounded-lg border border-slate-200/60 bg-white/60 px-2 text-sm font-medium text-slate-700 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/10 dark:border-slate-600/40 dark:bg-slate-800/60 dark:text-slate-300"
+            className="input h-8 w-auto px-2 text-sm"
           >
             {months.map((m) => (
               <option key={m.value} value={m.value}>{m.label}</option>
@@ -73,17 +73,17 @@ export function Header() {
 
       {/* Right: Controls */}
       <div className="flex items-center gap-2">
-        {/* Currency segmented control */}
-        <div className="segmented-control">
+        {/* Currency toggle */}
+        <div className="flex rounded-lg border border-slate-300 overflow-hidden">
           {(['local', 'EUR'] as const).map((mode) => (
             <button
               key={mode}
               onClick={() => currencyMode !== mode && toggleCurrencyMode()}
               className={cn(
-                'h-7 rounded-md px-3 text-xs font-semibold transition-all duration-200',
+                'h-7 px-3 text-xs font-medium transition-colors duration-150',
                 currencyMode === mode
-                  ? 'bg-white text-slate-900 shadow-sm dark:bg-slate-600 dark:text-white'
-                  : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'
+                  ? 'bg-brand-500 text-white'
+                  : 'bg-white text-slate-600 hover:bg-slate-50'
               )}
             >
               {mode === 'local' ? t('common.local') : 'EUR'}
@@ -95,7 +95,7 @@ export function Header() {
         <select
           value={currentLang}
           onChange={(e) => setLanguage(e.target.value as Language)}
-          className="h-8 rounded-lg border border-slate-200/60 bg-white/60 px-2 text-xs font-medium text-slate-700 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/10 dark:border-slate-600/40 dark:bg-slate-800/60 dark:text-slate-300"
+          className="input h-8 w-auto px-2 text-xs"
         >
           {LANGUAGES.map((lang) => (
             <option key={lang.code} value={lang.code}>
@@ -107,7 +107,7 @@ export function Header() {
         {/* Theme toggle */}
         <button
           onClick={toggleTheme}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-all duration-200 hover:bg-slate-100/80 hover:text-slate-600 active:scale-[0.98] dark:hover:bg-slate-700/50 dark:hover:text-slate-300"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-600"
         >
           {theme === 'light' ? (
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -124,12 +124,12 @@ export function Header() {
         <div className="relative">
           <button
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className="flex h-8 items-center gap-2 rounded-lg px-2 transition-all duration-200 hover:bg-slate-100/80 active:scale-[0.98] dark:hover:bg-slate-700/50"
+            className="flex h-8 items-center gap-2 rounded-lg px-2 transition-colors duration-150 hover:bg-slate-100"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-violet-500 text-[11px] font-bold text-white shadow-lg shadow-brand-500/20">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-500 text-[11px] font-semibold text-white">
               {user?.full_name?.charAt(0).toUpperCase() || 'U'}
             </div>
-            <span className="hidden text-sm font-medium text-slate-700 dark:text-slate-300 sm:block">
+            <span className="hidden text-sm font-medium text-slate-700 sm:block">
               {user?.full_name?.split(' ')[0] || t('common.user')}
             </span>
             <svg className="h-3.5 w-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -140,15 +140,15 @@ export function Header() {
           {userMenuOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
-              <div className="absolute right-0 z-50 mt-2 w-52 animate-scale-in overflow-hidden rounded-xl glass-card shadow-xl">
-                <div className="border-b border-slate-200/30 px-4 py-3 dark:border-slate-700/30">
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white">{user?.full_name}</p>
+              <div className="absolute right-0 z-50 mt-2 w-52 animate-scale-in overflow-hidden rounded-xl card shadow-lg">
+                <div className="border-b border-slate-200 px-4 py-3">
+                  <p className="text-sm font-semibold text-slate-900">{user?.full_name}</p>
                   <p className="truncate text-xs text-slate-500 mt-0.5">{user?.email}</p>
                 </div>
                 <div className="py-1">
                   <button
                     onClick={() => { setUserMenuOpen(false); logout.mutate(); }}
-                    className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-red-600 transition-colors duration-150 hover:bg-red-50/80 dark:text-red-400 dark:hover:bg-red-900/10"
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-red-600 transition-colors duration-150 hover:bg-red-50"
                   >
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />

@@ -38,29 +38,15 @@ function getInitials(name: string): string {
     .toUpperCase();
 }
 
-const INITIAL_COLORS = [
-  'from-blue-400 to-blue-600',
-  'from-violet-400 to-violet-600',
-  'from-emerald-400 to-emerald-600',
-  'from-amber-400 to-amber-600',
-  'from-rose-400 to-rose-600',
-  'from-cyan-400 to-cyan-600',
-  'from-indigo-400 to-indigo-600',
-  'from-teal-400 to-teal-600',
-];
-
-function hashStr(s: string): number {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-  return Math.abs(h);
-}
-
 function Spinner() {
   return (
     <div className="flex items-center justify-center py-20">
-      <div className="relative h-10 w-10">
-        <div className="absolute inset-0 rounded-full border-2 border-blue-200 dark:border-blue-900" />
-        <div className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-blue-500" />
+      <div className="flex items-center gap-3 text-slate-400">
+        <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        </svg>
+        <span className="text-sm">Loading...</span>
       </div>
     </div>
   );
@@ -68,8 +54,8 @@ function Spinner() {
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="glass-card flex flex-col items-center justify-center py-20 text-slate-400 dark:text-slate-500">
-      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800">
+    <div className="card flex flex-col items-center justify-center py-20 text-slate-400 dark:text-slate-500">
+      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800">
         <svg className="h-8 w-8 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
         </svg>
@@ -105,47 +91,29 @@ function HeadcountTab({ siteId }: { siteId: string | null }) {
   }
   const deptList = departments.length > 0 ? departments : Object.keys(byDept).map((name) => ({ name, employees: byDept[name] }));
 
-  const DEPT_GRADIENTS = [
-    'from-blue-500 to-indigo-600',
-    'from-violet-500 to-purple-600',
-    'from-emerald-500 to-teal-600',
-    'from-amber-500 to-orange-600',
-    'from-rose-500 to-pink-600',
-    'from-cyan-500 to-sky-600',
-  ];
-
   return (
-    <div className="space-y-8 stagger-children">
-      {/* Department cards grid */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {deptList.map((dept: any, deptIdx: number) => {
+    <div className="space-y-6">
+      {/* Department summary cards */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {deptList.map((dept: any) => {
           const deptName = dept.name || dept.department || 'Unassigned';
           const deptEmployees = dept.employees || byDept[deptName] || [];
           const headcount = dept.headcount ?? deptEmployees.length;
           const fte = dept.fte_count ?? deptEmployees.reduce((s: number, e: any) => s + (Number(e.fte) || 0), 0);
-          const gradient = DEPT_GRADIENTS[deptIdx % DEPT_GRADIENTS.length];
 
           return (
-            <div
-              key={deptName}
-              className="glass-card group overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
-            >
-              <div className={cn('bg-gradient-to-r p-4', gradient)}>
-                <p className="text-xs font-semibold uppercase tracking-widest text-white/70">{t('hr.department')}</p>
-                <h3 className="mt-1 text-lg font-bold text-white font-display">{deptName}</h3>
-              </div>
-              <div className="flex items-center gap-6 p-5">
-                <div className="text-center">
-                  <p className="text-3xl font-bold font-display font-mono tabular-nums text-slate-900 dark:text-white">{headcount}</p>
-                  <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">{t('hr.headcount')}</p>
-                </div>
-                <div className="h-10 w-px bg-slate-200 dark:bg-slate-700" />
+            <div key={deptName} className="card p-5">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{t('hr.department')}</p>
+              <h3 className="mt-1 text-base font-semibold text-slate-900 dark:text-white">{deptName}</h3>
+              <div className="mt-3 flex items-center gap-4">
                 <div>
-                  <span className="pill-blue inline-flex items-center gap-1.5">
-                    <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" /></svg>
-                    {fte.toFixed ? fte.toFixed(1) : fte} FTE
-                  </span>
+                  <span className="font-mono tabular-nums text-2xl font-semibold text-slate-900 dark:text-white">{headcount}</span>
+                  <span className="ml-1 text-xs text-slate-400">{t('hr.headcount')}</span>
                 </div>
+                <div className="h-6 w-px bg-slate-200 dark:bg-slate-700" />
+                <span className="pill-blue">
+                  {fte.toFixed ? fte.toFixed(1) : fte} FTE
+                </span>
               </div>
             </div>
           );
@@ -159,22 +127,19 @@ function HeadcountTab({ siteId }: { siteId: string | null }) {
         if (deptEmployees.length === 0) return null;
 
         return (
-          <div key={`table-${deptName}`} className="glass-card overflow-hidden">
-            <div className="flex items-center gap-3 border-b border-slate-100 px-6 py-4 dark:border-slate-700/50">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-violet-600">
-                <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" /></svg>
-              </div>
-              <h3 className="text-sm font-bold font-display text-slate-800 dark:text-slate-200">{deptName}</h3>
+          <div key={`table-${deptName}`} className="card overflow-hidden">
+            <div className="flex items-center gap-3 border-b border-slate-200 px-6 py-4 dark:border-slate-700">
+              <h3 className="text-base font-semibold text-slate-800 dark:text-slate-200">{deptName}</h3>
               <span className="pill-slate">{deptEmployees.length}</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-slate-100 dark:border-slate-700/50">
-                    <th className="px-6 py-3 text-left text-[11px] font-semibold uppercase tracking-widest text-slate-400">{t('hr.employee') || 'Employee'}</th>
-                    <th className="px-6 py-3 text-left text-[11px] font-semibold uppercase tracking-widest text-slate-400">{t('hr.position')}</th>
-                    <th className="px-6 py-3 text-left text-[11px] font-semibold uppercase tracking-widest text-slate-400">{t('hr.employmentType')}</th>
-                    <th className="px-6 py-3 text-left text-[11px] font-semibold uppercase tracking-widest text-slate-400">{t('hr.startDate')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">{t('hr.employee') || 'Employee'}</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">{t('hr.position')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">{t('hr.employmentType')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">{t('hr.startDate')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -183,30 +148,29 @@ function HeadcountTab({ siteId }: { siteId: string | null }) {
                     const typeKey = emp.employment_type || 'full_time';
                     const pillClass = EMPLOYMENT_TYPE_PILLS[typeKey] || 'pill-slate';
                     const initials = getInitials(name);
-                    const colorIdx = hashStr(name) % INITIAL_COLORS.length;
 
                     return (
                       <tr
                         key={emp.id || idx}
-                        className="group border-b border-slate-50 transition-colors duration-150 hover:bg-blue-50/30 dark:border-slate-800/50 dark:hover:bg-slate-700/20"
+                        className="border-b border-slate-50 transition-colors hover:bg-slate-50 dark:border-slate-800/50 dark:hover:bg-slate-700/20"
                       >
-                        <td className="px-6 py-3.5">
+                        <td className="px-6 py-3">
                           <div className="flex items-center gap-3">
-                            <div className={cn('flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-xs font-bold text-white shadow-sm', INITIAL_COLORS[colorIdx])}>
+                            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-600 dark:bg-slate-700 dark:text-slate-300">
                               {initials}
                             </div>
                             <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">{name}</span>
                           </div>
                         </td>
-                        <td className="px-6 py-3.5 text-sm text-slate-500 dark:text-slate-400">
+                        <td className="px-6 py-3 text-sm text-slate-500 dark:text-slate-400">
                           {emp.position || emp.job_title || '--'}
                         </td>
-                        <td className="px-6 py-3.5">
+                        <td className="px-6 py-3">
                           <span className={pillClass}>
                             {typeKey.replace(/_/g, ' ')}
                           </span>
                         </td>
-                        <td className="px-6 py-3.5 text-sm text-slate-500 dark:text-slate-400">
+                        <td className="px-6 py-3 text-sm text-slate-500 dark:text-slate-400">
                           {formatDate(emp.start_date)}
                         </td>
                       </tr>
@@ -242,39 +206,30 @@ function PayrollTab({ siteId, year, month }: { siteId: string | null; year: numb
   const isConsolidated = !siteId;
 
   const summaryDefs = [
-    { label: t('hr.totalGross'), value: formatCurrency(summary?.total_gross), gradient: 'from-blue-500 to-indigo-600', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { label: t('hr.totalNet'), value: formatCurrency(summary?.total_net), gradient: 'from-emerald-500 to-teal-600', icon: 'M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z' },
-    { label: t('hr.totalCost') || 'Employer Cost', value: formatCurrency(summary?.total_employer_cost), gradient: 'from-amber-500 to-orange-600', icon: 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z' },
-    { label: 'Total CTC', value: formatCurrency(summary?.total_ctc), gradient: 'from-violet-500 to-purple-600', icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' },
+    { label: t('hr.totalGross'), value: formatCurrency(summary?.total_gross), border: 'border-l-blue-500' },
+    { label: t('hr.totalNet'), value: formatCurrency(summary?.total_net), border: 'border-l-emerald-500' },
+    { label: t('hr.totalCost') || 'Employer Cost', value: formatCurrency(summary?.total_employer_cost), border: 'border-l-amber-500' },
+    { label: 'Total CTC', value: formatCurrency(summary?.total_ctc), border: 'border-l-violet-500' },
   ];
 
   return (
-    <div className="space-y-8 stagger-children">
-      {/* Gradient summary cards */}
+    <div className="space-y-6">
+      {/* Summary cards */}
       {summary && (
-        <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {summaryDefs.map((card, i) => (
-            <div
-              key={i}
-              className={cn('gradient-card group relative overflow-hidden rounded-2xl bg-gradient-to-br p-5 text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-xl', card.gradient)}
-            >
-              <div className="absolute -right-3 -top-3 h-20 w-20 rounded-full bg-white/10 transition-transform duration-500 group-hover:scale-150" />
-              <div className="absolute -bottom-4 -left-4 h-16 w-16 rounded-full bg-white/5" />
-              <svg className="h-5 w-5 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={card.icon} /></svg>
-              <p className="mt-3 text-[11px] font-semibold uppercase tracking-widest text-white/70">{card.label}</p>
-              <p className="mt-1 text-2xl font-bold font-display font-mono tabular-nums">{card.value}</p>
+            <div key={i} className={cn('card border-l-4 p-5', card.border)}>
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{card.label}</p>
+              <p className="mt-2 text-2xl font-semibold font-mono tabular-nums text-slate-900 dark:text-white">{card.value}</p>
             </div>
           ))}
         </div>
       )}
 
       {/* Department breakdown table */}
-      <div className="glass-card overflow-hidden">
-        <div className="flex items-center gap-3 border-b border-slate-100 px-6 py-4 dark:border-slate-700/50">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600">
-            <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-          </div>
-          <h3 className="text-sm font-bold font-display text-slate-800 dark:text-slate-200">
+      <div className="card overflow-hidden">
+        <div className="flex items-center gap-3 border-b border-slate-200 px-6 py-4 dark:border-slate-700">
+          <h3 className="text-base font-semibold text-slate-800 dark:text-slate-200">
             {isConsolidated ? 'By Site' : `By ${t('hr.department')}`}
           </h3>
           {isConsolidated && (
@@ -285,41 +240,41 @@ function PayrollTab({ siteId, year, month }: { siteId: string | null; year: numb
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-700/50">
-                <th className="px-6 py-3.5 text-left text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                   {isConsolidated ? t('common.site') : t('hr.department')}
                 </th>
-                <th className="px-6 py-3.5 text-right text-[11px] font-semibold uppercase tracking-widest text-slate-400">{t('hr.totalHeadcount')}</th>
-                <th className="px-6 py-3.5 text-right text-[11px] font-semibold uppercase tracking-widest text-slate-400">{t('hr.totalGross')}</th>
-                <th className="px-6 py-3.5 text-right text-[11px] font-semibold uppercase tracking-widest text-slate-400">{t('hr.totalNet')}</th>
-                <th className="px-6 py-3.5 text-right text-[11px] font-semibold uppercase tracking-widest text-slate-400">{t('hr.totalCost') || 'Employer Cost'}</th>
-                <th className="px-6 py-3.5 text-right text-[11px] font-semibold uppercase tracking-widest text-slate-400">Avg Salary</th>
+                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">{t('hr.totalHeadcount')}</th>
+                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">{t('hr.totalGross')}</th>
+                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">{t('hr.totalNet')}</th>
+                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">{t('hr.totalCost') || 'Employer Cost'}</th>
+                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Avg Salary</th>
               </tr>
             </thead>
             <tbody>
               {departments.map((row: any, idx: number) => (
                 <tr
                   key={row.name || row.site_name || idx}
-                  className="group border-b border-slate-50 transition-colors duration-150 hover:bg-blue-50/30 dark:border-slate-800/50 dark:hover:bg-slate-700/20"
+                  className="border-b border-slate-50 transition-colors hover:bg-slate-50 dark:border-slate-800/50 dark:hover:bg-slate-700/20"
                 >
-                  <td className="px-6 py-4 text-sm font-semibold text-slate-800 dark:text-slate-200">
+                  <td className="px-6 py-3 text-sm font-semibold text-slate-800 dark:text-slate-200">
                     {row.name || row.site_name || row.department || '--'}
                     {isConsolidated && row.currency && (
                       <span className="ml-2 text-[10px] font-medium text-slate-400">({row.currency})</span>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm font-mono tabular-nums font-semibold text-slate-700 dark:text-slate-300">
+                  <td className="px-6 py-3 text-right text-sm font-mono tabular-nums font-semibold text-slate-700 dark:text-slate-300">
                     {row.headcount ?? '--'}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
+                  <td className="px-6 py-3 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
                     {formatCurrency(row.total_gross)}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
+                  <td className="px-6 py-3 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
                     {formatCurrency(row.total_net)}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
+                  <td className="px-6 py-3 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
                     {formatCurrency(row.total_cost ?? row.total_employer_cost)}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
+                  <td className="px-6 py-3 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
                     {formatCurrency(row.avg_salary)}
                   </td>
                 </tr>
@@ -381,10 +336,10 @@ function UploadTab() {
 
   return (
     <div className="space-y-6">
-      <div className="max-w-2xl glass-card overflow-hidden">
-        <div className="bg-gradient-to-r from-brand-700 via-brand-600 to-violet-600 px-6 py-5">
-          <h3 className="text-lg font-bold font-display text-white">{t('hr.upload')}</h3>
-          <p className="mt-1 text-sm text-white/70">
+      <div className="max-w-2xl card overflow-hidden">
+        <div className="border-b border-slate-200 px-6 py-5 dark:border-slate-700">
+          <h3 className="text-base font-semibold text-slate-900 dark:text-white">{t('hr.upload')}</h3>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Upload a CSV file with salary records for a specific site.
           </p>
         </div>
@@ -414,27 +369,25 @@ function UploadTab() {
               onDrop={handleDrop}
               onClick={() => fileRef.current?.click()}
               className={cn(
-                'group relative flex cursor-pointer items-center justify-center rounded-2xl border-2 border-dashed px-6 py-12 transition-all duration-300',
+                'flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed px-6 py-12 transition-colors',
                 isDragOver
-                  ? 'border-brand-500 bg-brand-50/50 scale-[1.01] dark:bg-brand-900/10'
+                  ? 'border-brand-500 bg-brand-50/50 dark:bg-brand-900/10'
                   : selectedFile
                     ? 'border-emerald-300 bg-emerald-50/30 dark:border-emerald-700 dark:bg-emerald-900/10'
-                    : 'border-slate-200 bg-slate-50/50 hover:border-brand-400 hover:bg-brand-50/20 dark:border-slate-600 dark:bg-slate-800/30 dark:hover:border-brand-500 dark:hover:bg-brand-900/10'
+                    : 'border-slate-200 bg-slate-50/50 hover:border-brand-400 dark:border-slate-600 dark:bg-slate-800/30'
               )}
             >
               <div className="text-center">
                 <div className={cn(
-                  'mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-300',
-                  isDragOver
-                    ? 'bg-gradient-to-br from-brand-500 to-violet-600 scale-110'
-                    : selectedFile
-                      ? 'bg-gradient-to-br from-emerald-500 to-teal-600'
-                      : 'bg-gradient-to-br from-slate-200 to-slate-300 group-hover:from-brand-500 group-hover:to-violet-600 dark:from-slate-600 dark:to-slate-700'
+                  'mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl',
+                  selectedFile
+                    ? 'bg-emerald-100 dark:bg-emerald-900/30'
+                    : 'bg-slate-100 dark:bg-slate-800'
                 )}>
                   {selectedFile ? (
-                    <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    <svg className="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                   ) : (
-                    <svg className="h-6 w-6 text-slate-500 transition-colors group-hover:text-white dark:text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                     </svg>
                   )}
@@ -499,8 +452,8 @@ function UploadTab() {
             className={cn(
               'mx-6 mb-6 flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold',
               uploadResult.type === 'success'
-                ? 'bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 dark:from-emerald-900/20 dark:to-teal-900/20 dark:text-emerald-400'
-                : 'bg-gradient-to-r from-red-50 to-rose-50 text-red-700 dark:from-red-900/20 dark:to-rose-900/20 dark:text-red-400'
+                ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400'
+                : 'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400'
             )}
           >
             {uploadResult.type === 'success' ? (
@@ -532,13 +485,13 @@ export function HRPage() {
 
   const summary = headcountData?.summary;
 
-  const tabLabels: Record<Tab, { label: string; icon: string }> = {
-    headcount: { label: t('hr.headcount'), icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
-    payroll: { label: t('hr.payroll'), icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-    upload: { label: t('hr.upload'), icon: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12' },
+  const tabLabels: Record<Tab, string> = {
+    headcount: t('hr.headcount'),
+    payroll: t('hr.payroll'),
+    upload: t('hr.upload'),
   };
 
-  const heroMetrics = [
+  const statsDefs = [
     { label: t('hr.totalHeadcount'), value: summary?.total_headcount ?? '--' },
     { label: t('hr.fteCount'), value: summary?.fte_count != null ? Number(summary.fte_count).toFixed(1) : '--' },
     { label: 'Avg Salary', value: summary?.avg_salary != null ? formatCurrency(summary.avg_salary) : '--' },
@@ -546,49 +499,38 @@ export function HRPage() {
   ];
 
   return (
-    <div className="page-enter space-y-8">
-      {/* Hero banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-700 via-brand-600 to-violet-600 px-8 py-10 shadow-xl shadow-brand-900/20">
-        <div className="absolute -right-10 -top-10 h-60 w-60 rounded-full bg-white/5" />
-        <div className="absolute -bottom-8 -left-8 h-40 w-40 rounded-full bg-white/5" />
-        <div className="absolute right-20 top-20 h-20 w-20 rounded-full bg-white/5" />
-
-        <div className="relative">
-          <h1 className="text-3xl font-bold tracking-tight text-white font-display lg:text-4xl">
-            {t('hr.title') || 'People & Payroll'}
-          </h1>
-          <p className="mt-2 text-sm text-white/60">
-            Manage headcount, payroll, and salary data across all sites.
-          </p>
-
-          <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {heroMetrics.map((m, i) => (
-              <div key={i} className="rounded-xl bg-white/10 backdrop-blur-sm px-4 py-3 transition-all duration-300 hover:bg-white/15">
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-white/50">{m.label}</p>
-                <p className="mt-1 text-2xl font-bold font-mono tabular-nums text-white">{m.value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+    <div className="page-enter space-y-6">
+      {/* Simple page title */}
+      <div>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
+          {t('hr.title') || 'People & Payroll'}
+        </h1>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          Manage headcount, payroll, and salary data across all sites.
+        </p>
       </div>
 
-      {/* Segmented control tabs */}
-      <div className="segmented-control">
+      {/* Stats row - 4 simple cards */}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {statsDefs.map((m, i) => (
+          <div key={i} className="card p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{m.label}</p>
+            <p className="mt-2 text-2xl font-semibold font-mono tabular-nums text-slate-900 dark:text-white">{m.value}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Underline tabs */}
+      <div className="flex gap-6 border-b border-slate-200 mb-6">
         {TABS.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={cn(
-              'inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all duration-200',
-              activeTab === tab
-                ? 'bg-white text-slate-900 shadow-sm dark:bg-slate-700 dark:text-white'
-                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+            className={cn('pb-3 text-sm font-medium border-b-2 -mb-px transition-colors',
+              activeTab === tab ? 'border-brand-500 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700'
             )}
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={tabLabels[tab].icon} />
-            </svg>
-            {tabLabels[tab].label}
+            {tabLabels[tab]}
           </button>
         ))}
       </div>

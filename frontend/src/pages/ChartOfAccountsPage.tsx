@@ -10,6 +10,7 @@ import {
 } from '@/api/hooks';
 import type { GroupAccountResponse, SiteAccountResponse } from '@/api/hooks';
 import { useTranslation } from '@/i18n/useTranslation';
+import { cn } from '@/utils/cn';
 
 const ACCOUNT_TYPE_PILL: Record<string, string> = {
   asset: 'pill-blue',
@@ -85,7 +86,7 @@ export function ChartOfAccountsPage() {
     <div className="page-enter space-y-6">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
           {t('accounts.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -93,13 +94,15 @@ export function ChartOfAccountsPage() {
         </p>
       </div>
 
-      {/* Segmented Control Tabs */}
-      <div className="segmented-control">
+      {/* Underline Tabs */}
+      <div className="flex gap-6 border-b border-slate-200 mb-6">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={activeTab === tab.key ? 'active' : ''}
+            className={cn('pb-3 text-sm font-medium border-b-2 -mb-px transition-colors',
+              activeTab === tab.key ? 'border-brand-500 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700'
+            )}
           >
             {tab.label}
           </button>
@@ -208,10 +211,10 @@ function GroupAccountsTab() {
       {sections.map((section) => {
         const sectionPill = ACCOUNT_TYPE_PILL[section.type] || 'pill-slate';
         return (
-          <div key={section.type} className="glass-card overflow-hidden">
+          <div key={section.type} className="card overflow-hidden">
             {/* Section Header */}
             <div className="flex items-center gap-2 px-5 py-3 border-b border-slate-200/50 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/50">
-              <h3 className={`text-sm font-semibold font-display capitalize text-slate-700 dark:text-slate-200`}>{section.type}</h3>
+              <h3 className={`text-sm font-semibold capitalize text-slate-700 dark:text-slate-200`}>{section.type}</h3>
               <span className={`${sectionPill} !text-[10px]`}>
                 {section.accounts.length} accounts
               </span>
@@ -390,7 +393,7 @@ function SiteAccountsTab() {
 
       {/* No site selected */}
       {!siteId && (
-        <div className="glass-card border-dashed flex flex-col items-center justify-center py-16">
+        <div className="card border-dashed flex flex-col items-center justify-center py-16">
           <svg className="h-12 w-12 text-slate-300 dark:text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
           </svg>
@@ -414,9 +417,9 @@ function SiteAccountsTab() {
       {siteId && !isLoading && sections.map((section) => {
         const sectionPill = ACCOUNT_TYPE_PILL[section.type] || 'pill-slate';
         return (
-          <div key={section.type} className="glass-card overflow-hidden">
+          <div key={section.type} className="card overflow-hidden">
             <div className="flex items-center gap-2 px-5 py-3 border-b border-slate-200/50 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/50">
-              <h3 className="text-sm font-semibold font-display capitalize text-slate-700 dark:text-slate-200">{section.type}</h3>
+              <h3 className="text-sm font-semibold capitalize text-slate-700 dark:text-slate-200">{section.type}</h3>
               <span className={`${sectionPill} !text-[10px]`}>
                 {section.accounts.length} accounts
               </span>
@@ -603,7 +606,7 @@ function MappingMatrixTab() {
 
       {/* No site selected */}
       {!siteId && (
-        <div className="glass-card border-dashed flex flex-col items-center justify-center py-16">
+        <div className="card border-dashed flex flex-col items-center justify-center py-16">
           <svg className="h-12 w-12 text-slate-300 dark:text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
           </svg>
@@ -625,7 +628,7 @@ function MappingMatrixTab() {
 
       {/* Mapping Matrix Table */}
       {siteId && groupAccounts && !mappingLoading && (
-        <div className="glass-card overflow-hidden">
+        <div className="card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>

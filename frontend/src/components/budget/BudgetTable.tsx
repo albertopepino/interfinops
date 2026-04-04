@@ -104,7 +104,7 @@ export function BudgetTable() {
           )}
           <Button
             size="sm"
-            variant="glass"
+            variant="secondary"
             onClick={() => {
               setEditedEntries(new Map());
               setIsDirty(false);

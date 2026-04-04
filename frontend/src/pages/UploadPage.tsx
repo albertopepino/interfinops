@@ -27,7 +27,7 @@ export function UploadPage() {
     <div className="page-enter space-y-8">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
           {t('upload.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -35,21 +35,21 @@ export function UploadPage() {
         </p>
       </div>
 
-      {/* Upload form in glass-card */}
-      <div className="glass-card p-6">
+      {/* Upload form in card */}
+      <div className="card p-6">
         <UploadForm />
       </div>
 
       {/* Upload history */}
       <div>
-        <h2 className="text-lg font-semibold font-display text-slate-900 dark:text-white mb-4">
+        <h2 className="text-base font-semibold text-slate-900 dark:text-white mb-4">
           {t('upload.history')}
         </h2>
 
         {historyLoading ? (
           <LoadingSpinner label="Loading history..." />
         ) : !history || history.items.length === 0 ? (
-          <div className="glass-card border-dashed">
+          <div className="card border-dashed">
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <svg className="h-12 w-12 text-slate-300 dark:text-slate-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
@@ -61,33 +61,33 @@ export function UploadPage() {
             </div>
           </div>
         ) : (
-          <div className="glass-card overflow-hidden">
-            <table className="min-w-full divide-y divide-slate-200/50 dark:divide-slate-700/50">
+          <div className="card overflow-hidden">
+            <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
               <thead>
-                <tr className="bg-slate-50/50 dark:bg-slate-900/50">
-                  <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-400 uppercase tracking-widest">
+                <tr className="bg-slate-50 dark:bg-slate-800/50">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                     Statement Type
                   </th>
-                  <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-400 uppercase tracking-widest">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                     Period
                   </th>
-                  <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-400 uppercase tracking-widest">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                     Status
                   </th>
-                  <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-400 uppercase tracking-widest">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                     Uploaded By
                   </th>
-                  <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-400 uppercase tracking-widest">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                     Uploaded At
                   </th>
-                  <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-400 uppercase tracking-widest">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                     Items
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100/50 dark:divide-slate-700/30">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
                 {history.items.map((stmt) => (
-                  <tr key={stmt.id} className="transition-colors hover:bg-slate-50/60 dark:hover:bg-slate-700/20">
+                  <tr key={stmt.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/20">
                     <td className="px-4 py-3 text-sm text-slate-700 dark:text-slate-300">
                       {STATEMENT_LABELS[stmt.statementType] || stmt.statementType}
                     </td>

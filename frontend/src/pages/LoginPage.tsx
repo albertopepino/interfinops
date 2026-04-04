@@ -52,84 +52,74 @@ export function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4">
-      {/* Background */}
+      {/* Background - clean gradient, no orbs or grid */}
       <div
         className="absolute inset-0 -z-10"
         style={{
           background: 'linear-gradient(140deg, #062033 0%, #0c3a5f 30%, #1a6fb5 55%, #3a9d6a 80%, #2d8a4e 100%)',
-          backgroundSize: '300% 300%',
-          animation: 'gradientShift 20s ease infinite',
         }}
       />
-      <div className="absolute inset-0 -z-10 opacity-20" style={{
-        background: 'radial-gradient(circle at 30% 20%, rgba(26,111,181,0.4) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(92,184,92,0.3) 0%, transparent 50%)',
-      }} />
-      {/* Subtle grid pattern */}
-      <div className="absolute inset-0 -z-10 opacity-[0.03]" style={{
-        backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-        backgroundSize: '60px 60px',
-      }} />
 
       {/* Card */}
       <div className="w-full max-w-[440px] animate-scale-in" style={{ animationFillMode: 'backwards' }}>
-        {/* Logo - big and centered */}
+        {/* Logo */}
         <div className="mb-10 flex justify-center">
           <img
             src="/logo.png"
             alt="ConsolidaSuite"
-            className="h-20 w-auto drop-shadow-[0_4px_24px_rgba(255,255,255,0.15)]"
+            className="h-20 w-auto"
           />
         </div>
 
-        {/* Form card */}
-        <div className="rounded-3xl border border-white/[0.08] bg-white/[0.06] p-8 backdrop-blur-2xl shadow-[0_32px_64px_rgba(0,0,0,0.3)]">
+        {/* Form card - clean white with shadow */}
+        <div className="rounded-2xl bg-white p-8 shadow-lg dark:bg-slate-900 dark:border dark:border-slate-800">
           <div className="mb-7">
-            <h1 className="text-[26px] font-bold text-white font-display tracking-tight">
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
               {t('login.welcome')}
             </h1>
-            <p className="mt-1.5 text-[14px] text-white/40">
+            <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400">
               {t('login.subtitle')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
-              <label htmlFor="email" className="mb-2 block text-[11px] font-semibold uppercase tracking-widest text-white/40">
+              <label htmlFor="email" className="input-label">
                 {t('login.email')}
               </label>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
-                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.05] px-4 py-3 text-[14px] text-white placeholder:text-white/25 focus:border-white/20 focus:bg-white/[0.08] focus:outline-none focus:ring-0 transition-all duration-200"
+                className="input w-full"
                 placeholder="name@company.com"
                 {...register('email')}
               />
               {errors.email && (
-                <p className="mt-1.5 text-xs text-red-400">{errors.email.message}</p>
+                <p className="mt-1.5 text-xs text-red-500">{errors.email.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="password" className="mb-2 block text-[11px] font-semibold uppercase tracking-widest text-white/40">
+              <label htmlFor="password" className="input-label">
                 {t('login.password')}
               </label>
               <input
                 id="password"
                 type="password"
                 autoComplete="current-password"
-                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.05] px-4 py-3 text-[14px] text-white placeholder:text-white/25 focus:border-white/20 focus:bg-white/[0.08] focus:outline-none focus:ring-0 transition-all duration-200"
-                placeholder="••••••••"
+                className="input w-full"
+                placeholder="Enter your password"
                 {...register('password')}
               />
               {errors.password && (
-                <p className="mt-1.5 text-xs text-red-400">{errors.password.message}</p>
+                <p className="mt-1.5 text-xs text-red-500">{errors.password.message}</p>
               )}
             </div>
 
             {loginMutation.isError && (
-              <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
-                <p className="text-sm text-red-300">
+              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 dark:border-red-800 dark:bg-red-900/20">
+                <p className="text-sm text-red-600 dark:text-red-400">
                   {loginMutation.error instanceof Error
                     ? loginMutation.error.message
                     : t('login.invalidCredentials')}
@@ -140,7 +130,7 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={loginMutation.isPending}
-              className="w-full rounded-xl bg-gradient-to-r from-brand-500 to-accent-400 py-3.5 text-[14px] font-semibold text-white shadow-lg shadow-brand-500/20 transition-all duration-200 hover:shadow-xl hover:shadow-brand-500/30 hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
+              className="btn-primary w-full justify-center py-3"
             >
               {loginMutation.isPending ? (
                 <span className="flex items-center justify-center gap-2">
@@ -157,13 +147,13 @@ export function LoginPage() {
           </form>
         </div>
 
-        {/* Language switcher - clean, below the card */}
+        {/* Language switcher */}
         <div className="mt-8 flex items-center justify-center gap-1">
           {LANGUAGES.map((lang) => (
             <button
               key={lang.code}
               onClick={() => setLanguage(lang.code)}
-              className={`rounded-lg px-3 py-2 text-[13px] font-medium transition-all duration-200 ${
+              className={`rounded-lg px-3 py-2 text-[13px] font-medium transition-colors ${
                 currentLang === lang.code
                   ? 'bg-white/15 text-white'
                   : 'text-white/30 hover:text-white/60 hover:bg-white/5'
@@ -179,14 +169,6 @@ export function LoginPage() {
           {t('login.footerNote')}
         </p>
       </div>
-
-      <style>{`
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-      `}</style>
     </div>
   );
 }
