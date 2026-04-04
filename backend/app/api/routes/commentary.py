@@ -7,6 +7,7 @@ from sqlalchemy import select
 
 from app.api.deps import AuditLogger, CurrentUser, DbSession, require_site_access
 from app.models.commentary import Commentary
+from app.models.user import UserRole
 from app.schemas.commentary import (
     CommentaryCreate,
     CommentaryListResponse,
@@ -33,8 +34,10 @@ async def list_commentaries(
         await require_site_access(site_id, current_user)
         stmt = stmt.where(Commentary.site_id == site_id)
     else:
-        # Filter for consolidated (null site_id) if no site specified
-        pass
+        # local_cfo users can only see commentaries for their assigned sites
+        if current_user.role == UserRole.local_cfo:
+            allowed_ids = [s.id for s in current_user.assigned_sites]
+            stmt = stmt.where(Commentary.site_id.in_(allowed_ids))
 
     if period_year is not None:
         stmt = stmt.where(Commentary.period_year == period_year)

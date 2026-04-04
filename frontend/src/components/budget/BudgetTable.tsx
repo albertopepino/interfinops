@@ -43,7 +43,7 @@ export function BudgetTable() {
     if (editedEntries.has(key)) {
       return editedEntries.get(key)!;
     }
-    return currencyMode === 'EUR' ? entry.budgetAmountEUR : entry.budgetAmount;
+    return (entry as any).budget_amount ?? (currencyMode === 'EUR' ? entry.budgetAmountEUR : entry.budgetAmount);
   };
 
   const getVarianceBadge = (entry: BudgetEntry) => {
@@ -205,9 +205,9 @@ function CategorySection({
           <tr key={entry.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
             <td className="sticky left-0 z-10 bg-white dark:bg-slate-800 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 whitespace-nowrap">
               <span className="font-mono text-xs text-slate-400 mr-2">
-                {entry.accountCode}
+                {(entry as any).line_item_code ?? entry.accountCode}
               </span>
-              {entry.accountName}
+              {(entry as any).line_item_code ?? entry.accountName}
             </td>
             {monthValues.map((value, i) => (
               <td key={i} className="px-1 py-1">

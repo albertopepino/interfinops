@@ -86,13 +86,13 @@ export function UploadPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
-                {history.items.map((stmt) => (
+                {history.items.map((stmt: any) => (
                   <tr key={stmt.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/20">
                     <td className="px-4 py-3 text-sm text-slate-700 dark:text-slate-300">
-                      {STATEMENT_LABELS[stmt.statementType] || stmt.statementType}
+                      {STATEMENT_LABELS[stmt.statement_type] || stmt.statement_type}
                     </td>
                     <td className="px-4 py-3 text-sm text-slate-700 dark:text-slate-300">
-                      {stmt.period.label}
+                      {`${stmt.period_year}-${String(stmt.period_month).padStart(2, '0')}`}
                     </td>
                     <td className="px-4 py-3">
                       <span className={STATUS_PILL[stmt.status] || 'pill-slate'}>
@@ -101,13 +101,13 @@ export function UploadPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-sm text-slate-500 dark:text-slate-400">
-                      {stmt.uploadedBy}
+                      {stmt.uploaded_by}
                     </td>
                     <td className="px-4 py-3 text-sm text-slate-500 dark:text-slate-400">
-                      {formatDateTime(stmt.uploadedAt)}
+                      {formatDateTime(stmt.uploaded_at)}
                     </td>
                     <td className="px-4 py-3 text-sm font-mono tabular-nums text-slate-500 dark:text-slate-400">
-                      {stmt.lineItems.length}
+                      {stmt.line_items?.length ?? 0}
                     </td>
                   </tr>
                 ))}

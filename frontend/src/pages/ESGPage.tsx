@@ -35,15 +35,15 @@ function EmptyState({ message }: { message: string }) {
 
 function MetricCard({ metric }: { metric: any }) {
   const { t } = useTranslation();
-  const value = metric.value ?? 0;
-  const target = metric.target ?? 0;
+  const value = metric.metric_value ?? 0;
+  const target = metric.target_value ?? 0;
   const progress = target > 0 ? Math.min((value / target) * 100, 100) : 0;
   const onTrack = target > 0 && value >= target;
 
   return (
     <div className="card p-5">
       <div className="flex items-start justify-between">
-        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{metric.name}</p>
+        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{metric.metric_name}</p>
         {metric.category && (
           <span className={cn(
             'text-[10px] font-semibold rounded-full px-2 py-0.5',

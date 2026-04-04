@@ -57,7 +57,7 @@ export function LeasesPage() {
   const items = data?.items ?? [];
 
   // Summary calculations
-  const totalRouAsset = items.reduce((sum: number, l: any) => sum + (l.rou_asset ?? 0), 0);
+  const totalRouAsset = items.reduce((sum: number, l: any) => sum + (l.right_of_use_asset ?? 0), 0);
   const totalLeaseLiability = items.reduce((sum: number, l: any) => sum + (l.lease_liability ?? 0), 0);
   const activeCount = items.filter((l: any) => l.status?.toLowerCase() === 'active').length;
 
@@ -124,10 +124,10 @@ export function LeasesPage() {
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {items.map((lease: any) => (
                 <tr key={lease.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/20">
-                  <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">{lease.name}</td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{lease.asset_type}</td>
+                  <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">{lease.asset_description}</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{lease.lease_type}</td>
                   <td className="px-4 py-3">
-                    <StandardBadge standard={lease.accounting_standard ?? 'IFRS16'} />
+                    <StandardBadge standard={lease.standard ?? 'IFRS16'} />
                   </td>
                   <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{lease.start_date ? new Date(lease.start_date).toLocaleDateString() : '-'}</td>
                   <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{lease.end_date ? new Date(lease.end_date).toLocaleDateString() : '-'}</td>
@@ -135,7 +135,7 @@ export function LeasesPage() {
                     {lease.monthly_payment != null ? Number(lease.monthly_payment).toLocaleString() : '-'}
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums text-slate-600 dark:text-slate-300">
-                    {lease.rou_asset != null ? Number(lease.rou_asset).toLocaleString() : '-'}
+                    {lease.right_of_use_asset != null ? Number(lease.right_of_use_asset).toLocaleString() : '-'}
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums text-slate-600 dark:text-slate-300">
                     {lease.lease_liability != null ? Number(lease.lease_liability).toLocaleString() : '-'}

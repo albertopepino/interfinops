@@ -7,11 +7,14 @@ from datetime import date
 from decimal import Decimal, InvalidOperation
 
 from dateutil.relativedelta import relativedelta
-from fastapi import APIRouter, HTTPException, Query, UploadFile, status
+from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, status
 from sqlalchemy import func, select
 
-from app.api.deps import AuditLogger, CurrentUser, DbSession, require_site_access
+from typing import Annotated
+
+from app.api.deps import AuditLogger, CurrentUser, DbSession, require_role, require_site_access
 from app.models.fixed_assets import Asset, AssetCategory, AssetStatus, DepreciationMethod
+from app.models.user import User, UserRole
 from app.models.fx_rate import FxRate
 from app.models.site import Site
 from app.schemas.fixed_assets import (
@@ -274,7 +277,7 @@ async def asset_summary(
 @router.get("/summary/consolidated", response_model=ConsolidatedAssetSummaryResponse)
 async def consolidated_asset_summary(
     db: DbSession,
-    current_user: CurrentUser,
+    current_user: Annotated[User, Depends(require_role(UserRole.admin, UserRole.group_cfo))],
     reporting_currency: str = Query("EUR", max_length=3, min_length=3),
     year: int = Query(2025, ge=2000, le=2100),
     month: int = Query(12, ge=1, le=12),

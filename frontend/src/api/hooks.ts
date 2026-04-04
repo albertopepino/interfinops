@@ -168,10 +168,7 @@ export function useBudget(params: {
   return useQuery({
     queryKey: ['budget', params],
     queryFn: () =>
-      apiClient.get<BudgetEntry[]>('/budget', {
-        site_id: params.siteId,
-        year: String(params.year),
-      }),
+      apiClient.get<BudgetEntry[]>(`/budgets/site/${params.siteId}?year=${params.year}`),
     enabled: !!params.siteId,
   });
 }
@@ -181,7 +178,7 @@ export function useSaveBudget() {
 
   return useMutation({
     mutationFn: (data: { siteId: string; entries: BudgetEntry[] }) =>
-      apiClient.put<void>(`/budget/${data.siteId}`, data.entries),
+      apiClient.post<void>('/budgets', data.entries),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['budget'] });
     },
@@ -251,7 +248,7 @@ export function useUploadStatement() {
       formData.append('statement_type', data.statementType);
       formData.append('year', String(data.year));
       formData.append('month', String(data.month));
-      return apiClient.upload<UploadResult>('/upload/statement', formData);
+      return apiClient.upload<UploadResult>(`/upload/${data.statementType}`, formData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['financial'] });
@@ -292,8 +289,7 @@ export function useUploadHistory(siteId: string) {
     queryKey: ['uploads', siteId],
     queryFn: () =>
       apiClient.get<PaginatedResponse<FinancialStatement>>(
-        '/upload/history',
-        { site_id: siteId }
+        `/financial-data/site/${siteId}`
       ),
     enabled: !!siteId,
   });
@@ -600,7 +596,7 @@ export function useSyncConnector() {
 export function useReconciliationItems(siteId: string) {
   return useQuery({
     queryKey: ['reconciliation', siteId],
-    queryFn: () => apiClient.get<{items: any[], total: number}>(`/reconciliation/${siteId}`),
+    queryFn: () => apiClient.get<{items: any[], total: number}>(`/reconciliation/items?site_id=${siteId}`),
     enabled: !!siteId,
   });
 }
@@ -609,7 +605,7 @@ export function useReconciliationItems(siteId: string) {
 export function useLeases(siteId: string) {
   return useQuery({
     queryKey: ['leases', siteId],
-    queryFn: () => apiClient.get<{items: any[], total: number}>(`/leases/${siteId}`),
+    queryFn: () => apiClient.get<{items: any[], total: number}>(`/leases/site/${siteId}`),
     enabled: !!siteId,
   });
 }
@@ -618,7 +614,7 @@ export function useLeases(siteId: string) {
 export function useESGMetrics(siteId: string) {
   return useQuery({
     queryKey: ['esg', 'metrics', siteId],
-    queryFn: () => apiClient.get<{items: any[], total: number}>(`/esg/metrics/${siteId}`),
+    queryFn: () => apiClient.get<{items: any[], total: number}>(`/esg/metrics?site_id=${siteId}`),
     enabled: !!siteId,
   });
 }

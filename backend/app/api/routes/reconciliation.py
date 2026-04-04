@@ -7,6 +7,7 @@ from sqlalchemy import select
 
 from app.api.deps import AuditLogger, CurrentUser, DbSession, require_site_access
 from app.models.reconciliation import ReconciliationItem, ReconciliationRule, ReconciliationStatus
+from app.models.user import UserRole
 from app.schemas.reconciliation import (
     ReconciliationItemCreate,
     ReconciliationItemListResponse,
@@ -89,7 +90,12 @@ async def list_items(
     """List reconciliation items with optional filters."""
     stmt = select(ReconciliationItem)
     if site_id is not None:
+        await require_site_access(site_id, current_user)
         stmt = stmt.where(ReconciliationItem.site_id == site_id)
+    else:
+        if current_user.role == UserRole.local_cfo:
+            allowed_ids = [s.id for s in current_user.assigned_sites]
+            stmt = stmt.where(ReconciliationItem.site_id.in_(allowed_ids))
     if account_code is not None:
         stmt = stmt.where(ReconciliationItem.account_code == account_code)
     if period_year is not None:

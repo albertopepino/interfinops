@@ -7,6 +7,7 @@ from sqlalchemy import select
 
 from app.api.deps import AuditLogger, CurrentUser, DbSession, require_site_access
 from app.models.esg import ESGCategory, ESGMetric, ESGReport
+from app.models.user import UserRole
 from app.schemas.esg import (
     ESGMetricCreate,
     ESGMetricListResponse,
@@ -37,7 +38,12 @@ async def list_metrics(
     """List ESG metrics with optional filters."""
     stmt = select(ESGMetric)
     if site_id is not None:
+        await require_site_access(site_id, current_user)
         stmt = stmt.where(ESGMetric.site_id == site_id)
+    else:
+        if current_user.role == UserRole.local_cfo:
+            allowed_ids = [s.id for s in current_user.assigned_sites]
+            stmt = stmt.where(ESGMetric.site_id.in_(allowed_ids))
     if category is not None:
         stmt = stmt.where(ESGMetric.category == category)
     if period_year is not None:
