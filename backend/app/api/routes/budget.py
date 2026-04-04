@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 
 from fastapi import APIRouter, HTTPException, Query, status
-from sqlalchemy import func, select
+from sqlalchemy import and_, select
 
 from app.api.deps import AuditLogger, CurrentUser, DbSession, require_site_access
 from app.models.budget import BudgetEntry
@@ -96,6 +96,63 @@ async def create_budget(
     )
 
     return BudgetEntryResponse.model_validate(entry)
+
+
+@router.post("/bulk", response_model=BudgetListResponse, status_code=status.HTTP_201_CREATED)
+async def bulk_create_budgets(
+    body: list[BudgetEntryCreate],
+    db: DbSession,
+    current_user: CurrentUser,
+    audit_log: AuditLogger,
+) -> BudgetListResponse:
+    """Bulk create/update budget entries."""
+    results: list[BudgetEntry] = []
+    for entry_data in body:
+        await require_site_access(entry_data.site_id, current_user)
+
+        # Upsert: check if exists by (site_id, line_item_code, period_year, period_month)
+        existing_result = await db.execute(
+            select(BudgetEntry).where(
+                and_(
+                    BudgetEntry.site_id == entry_data.site_id,
+                    BudgetEntry.line_item_code == entry_data.line_item_code,
+                    BudgetEntry.period_year == entry_data.period_year,
+                    BudgetEntry.period_month == entry_data.period_month,
+                )
+            )
+        )
+        existing = existing_result.scalar_one_or_none()
+
+        if existing is not None:
+            existing.budget_amount = entry_data.budget_amount
+            await db.flush()
+            await db.refresh(existing)
+            results.append(existing)
+        else:
+            entry = BudgetEntry(
+                site_id=entry_data.site_id,
+                line_item_code=entry_data.line_item_code,
+                period_year=entry_data.period_year,
+                period_month=entry_data.period_month,
+                budget_amount=entry_data.budget_amount,
+                created_by=current_user.id,
+            )
+            db.add(entry)
+            await db.flush()
+            await db.refresh(entry)
+            results.append(entry)
+
+    await audit_log(
+        "bulk_create",
+        "budget_entry",
+        "",
+        details={"count": len(results)},
+    )
+
+    return BudgetListResponse(
+        items=[BudgetEntryResponse.model_validate(e) for e in results],
+        total=len(results),
+    )
 
 
 @router.put("/{budget_id}", response_model=BudgetEntryResponse)

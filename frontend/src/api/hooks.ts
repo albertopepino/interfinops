@@ -83,13 +83,20 @@ export function useFinancialData(params: {
 }) {
   return useQuery({
     queryKey: ['financial', params],
-    queryFn: () =>
-      apiClient.get<FinancialStatement[]>('/financial/statements', {
-        site_id: params.siteId,
-        year: String(params.year),
-        month: String(params.month),
-        ...(params.statementType && { statement_type: params.statementType }),
-      }),
+    queryFn: async () => {
+      const queryParams: Record<string, string> = {
+        period_year: String(params.year),
+        period_month: String(params.month),
+      };
+      if (params.statementType) {
+        queryParams.statement_type = params.statementType;
+      }
+      const response = await apiClient.get<{ items: FinancialStatement[]; total: number }>(
+        `/financial-data/site/${params.siteId}`,
+        queryParams
+      );
+      return response.items;
+    },
     enabled: !!params.siteId,
   });
 }
@@ -167,8 +174,12 @@ export function useBudget(params: {
 }) {
   return useQuery({
     queryKey: ['budget', params],
-    queryFn: () =>
-      apiClient.get<BudgetEntry[]>(`/budgets/site/${params.siteId}?year=${params.year}`),
+    queryFn: async () => {
+      const response = await apiClient.get<{ items: BudgetEntry[]; total: number }>(
+        `/budgets/site/${params.siteId}?period_year=${params.year}`
+      );
+      return response.items;
+    },
     enabled: !!params.siteId,
   });
 }
@@ -178,7 +189,7 @@ export function useSaveBudget() {
 
   return useMutation({
     mutationFn: (data: { siteId: string; entries: BudgetEntry[] }) =>
-      apiClient.post<void>('/budgets', data.entries),
+      apiClient.post<{ items: BudgetEntry[]; total: number }>('/budgets/bulk', data.entries),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['budget'] });
     },
@@ -248,7 +259,7 @@ export function useUploadStatement() {
       formData.append('statement_type', data.statementType);
       formData.append('year', String(data.year));
       formData.append('month', String(data.month));
-      return apiClient.upload<UploadResult>(`/upload/${data.statementType}`, formData);
+      return apiClient.upload<UploadResult>(`/upload/${data.statementType.replace(/_/g, '-')}`, formData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['financial'] });

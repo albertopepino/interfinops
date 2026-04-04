@@ -165,6 +165,8 @@ async def update_item(
     if item is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reconciliation item not found")
 
+    await require_site_access(item.site_id, current_user)
+
     if body.status is not None:
         item.status = body.status
     if body.matched_with_id is not None:

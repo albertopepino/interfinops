@@ -68,12 +68,12 @@ export function ReconciliationPage() {
 
   const allItems = data?.items ?? [];
   const items = filterStatus
-    ? allItems.filter((item: any) => item.match_status?.toLowerCase() === filterStatus)
+    ? allItems.filter((item: any) => item.status?.toLowerCase() === filterStatus)
     : allItems;
 
-  const matchedCount = allItems.filter((i: any) => i.match_status?.toLowerCase() === 'matched').length;
-  const unmatchedCount = allItems.filter((i: any) => i.match_status?.toLowerCase() === 'unmatched').length;
-  const partialCount = allItems.filter((i: any) => i.match_status?.toLowerCase() === 'partial').length;
+  const matchedCount = allItems.filter((i: any) => i.status?.toLowerCase() === 'matched').length;
+  const unmatchedCount = allItems.filter((i: any) => i.status?.toLowerCase() === 'unmatched').length;
+  const partialCount = allItems.filter((i: any) => i.status?.toLowerCase() === 'partial').length;
 
   return (
     <div className="space-y-6">
@@ -125,16 +125,16 @@ export function ReconciliationPage() {
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
                 <th className="px-4 py-3 text-left font-medium text-slate-500 dark:text-slate-400">{t('reconciliation.account')}</th>
+                <th className="px-4 py-3 text-left font-medium text-slate-500 dark:text-slate-400">Source</th>
                 <th className="px-4 py-3 text-left font-medium text-slate-500 dark:text-slate-400">{t('reconciliation.description')}</th>
-                <th className="px-4 py-3 text-right font-medium text-slate-500 dark:text-slate-400">{t('reconciliation.sourceAmount')}</th>
-                <th className="px-4 py-3 text-right font-medium text-slate-500 dark:text-slate-400">{t('reconciliation.targetAmount')}</th>
-                <th className="px-4 py-3 text-right font-medium text-slate-500 dark:text-slate-400">{t('reconciliation.difference')}</th>
+                <th className="px-4 py-3 text-right font-medium text-slate-500 dark:text-slate-400">Amount</th>
+                <th className="px-4 py-3 text-left font-medium text-slate-500 dark:text-slate-400">Date</th>
                 <th className="px-4 py-3 text-left font-medium text-slate-500 dark:text-slate-400">{t('common.status')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {items.map((item: any) => {
-                const isUnmatched = item.match_status?.toLowerCase() === 'unmatched';
+                const isUnmatched = item.status?.toLowerCase() === 'unmatched';
                 return (
                   <tr
                     key={item.id}
@@ -144,23 +144,14 @@ export function ReconciliationPage() {
                     )}
                   >
                     <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">{item.account_code}</td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300 max-w-xs truncate">{item.description}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{item.source}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300 max-w-xs truncate">{item.description ?? '-'}</td>
                     <td className="px-4 py-3 text-right tabular-nums text-slate-600 dark:text-slate-300">
-                      {item.source_amount != null ? Number(item.source_amount).toLocaleString() : '-'}
+                      {item.amount != null ? Number(item.amount).toLocaleString() : '-'}
                     </td>
-                    <td className="px-4 py-3 text-right tabular-nums text-slate-600 dark:text-slate-300">
-                      {item.target_amount != null ? Number(item.target_amount).toLocaleString() : '-'}
-                    </td>
-                    <td className={cn(
-                      'px-4 py-3 text-right tabular-nums font-medium',
-                      item.difference > 0 ? 'text-red-600 dark:text-red-400' :
-                      item.difference < 0 ? 'text-red-600 dark:text-red-400' :
-                      'text-slate-600 dark:text-slate-300'
-                    )}>
-                      {item.difference != null ? Number(item.difference).toLocaleString() : '-'}
-                    </td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{item.transaction_date ?? '-'}</td>
                     <td className="px-4 py-3">
-                      <MatchBadge status={item.match_status ?? 'unmatched'} />
+                      <MatchBadge status={item.status ?? 'unmatched'} />
                     </td>
                   </tr>
                 );
