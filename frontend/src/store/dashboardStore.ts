@@ -94,8 +94,8 @@ export const useDashboardStore = create<DashboardState>()(
       setVisibleWidgets: (ids) => set({ visibleWidgets: ids }),
     }),
     {
-      name: 'interfinops-dashboard',
-      version: 6,
+      name: 'consolidasuite-dashboard',
+      version: 10,
       partialize: (state) => ({
         selectedSiteId: state.selectedSiteId,
         selectedYear: state.selectedYear,

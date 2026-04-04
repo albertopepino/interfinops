@@ -211,7 +211,7 @@ function StatementTable({ rows, currency }: { rows: DisplayRow[]; currency: stri
                   'border-b transition-colors duration-150',
                   // Summary rows: bold double-border look with subtle bg tint
                   row.isSummary && 'border-slate-300 dark:border-slate-600',
-                  row.isSummary && 'bg-gradient-to-r from-slate-50 to-slate-100/80 dark:from-slate-800/70 dark:to-slate-800/50',
+                  row.isSummary && 'bg-slate-50 dark:bg-slate-800/50',
                   // Section header rows: bold with colored left border
                   row.isHeader && !row.isSummary && cn('border-l-4', sectionColor, 'border-b-slate-100 dark:border-b-slate-700/40'),
                   // Normal rows
@@ -324,12 +324,12 @@ function StatementCard({ title, period, currency, status, uploadedAt, rows }: {
   rows: DisplayRow[];
 }) {
   return (
-    <div className="glass-card overflow-hidden">
+    <div className="card overflow-hidden">
       {/* Card header */}
-      <div className="border-b border-slate-200/60 bg-gradient-to-r from-slate-50 to-white px-7 py-5 dark:border-slate-700/40 dark:from-slate-800/80 dark:to-slate-800/60">
+      <div className="border-b border-slate-200 px-7 py-5 dark:border-slate-700">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="font-display text-lg font-bold text-slate-900 dark:text-white">{title}</h2>
+            <h2 className="text-base font-semibold text-slate-900 dark:text-white">{title}</h2>
             <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
               {period} &middot; {currency}
             </p>
@@ -365,8 +365,8 @@ function StatusBadge({ status }: { status: string }) {
 
 function LoadingSkeleton() {
   return (
-    <div className="glass-card overflow-hidden">
-      <div className="border-b border-slate-200/60 px-7 py-5 dark:border-slate-700/40">
+    <div className="card overflow-hidden">
+      <div className="border-b border-slate-200 px-7 py-5 dark:border-slate-700">
         <div className="h-5 w-48 animate-pulse rounded-lg bg-slate-200/60 dark:bg-slate-700/60" />
         <div className="mt-2.5 h-4 w-32 animate-pulse rounded-lg bg-slate-100/60 dark:bg-slate-700/40" />
       </div>
@@ -384,7 +384,7 @@ function LoadingSkeleton() {
 
 function ErrorState() {
   return (
-    <div className="glass-card p-12 text-center">
+    <div className="card p-12 text-center">
       <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10">
         <svg className="h-7 w-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z" />
@@ -397,7 +397,7 @@ function ErrorState() {
 
 function EmptyState() {
   return (
-    <div className="glass-card p-14 text-center">
+    <div className="card p-14 text-center">
       <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-500/10">
         <svg className="h-7 w-7 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -438,22 +438,21 @@ export function FinancialStatementsPage() {
           </svg>
           <span className="text-slate-400 dark:text-slate-500">{t(`statements.${activeTab === 'income_statement' ? 'incomeStatement' : activeTab === 'balance_sheet' ? 'balanceSheet' : 'cashFlow'}`)}</span>
         </div>
-        <h1 className="mt-2 font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="mt-2 text-xl font-semibold text-slate-900 dark:text-white">
           {t('statements.title')}
         </h1>
       </div>
 
-      {/* ── Segmented Control Tabs ──────────────────────────────────────── */}
-      <div className="segmented-control">
+      {/* ── Underline Tabs ────────────────────────────────────────────── */}
+      <div className="flex gap-6 border-b border-slate-200 mb-6">
         {TAB_DEFS.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={activeTab === tab.key ? 'active' : ''}
+            className={cn('pb-3 text-sm font-medium border-b-2 -mb-px transition-colors',
+              activeTab === tab.key ? 'border-brand-500 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700'
+            )}
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={tab.icon} />
-            </svg>
             {t(tab.translationKey)}
           </button>
         ))}

@@ -42,7 +42,7 @@ function StatusBadge({ status }: { status: string }) {
 
 function LoadingSkeleton() {
   return (
-    <div className="glass-card overflow-hidden">
+    <div className="card overflow-hidden">
       <div className="p-6 space-y-3">
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="flex justify-between">
@@ -57,7 +57,7 @@ function LoadingSkeleton() {
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="glass-card p-12 text-center">
+    <div className="card p-12 text-center">
       <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-500/10">
         <svg className="h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -83,9 +83,9 @@ function InvoicesTab({ siteId }: { siteId: string | null }) {
   if (items.length === 0) return <EmptyState message={t('common.noData')} />;
 
   return (
-    <div className="glass-card overflow-hidden">
-      <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
-        <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('ic.invoices')}</h2>
+    <div className="card overflow-hidden">
+      <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between">
+        <h2 className="text-base font-semibold text-slate-900 dark:text-white">{t('ic.invoices')}</h2>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
@@ -111,7 +111,7 @@ function InvoicesTab({ siteId }: { siteId: string | null }) {
           </thead>
           <tbody>
             {items.map((inv: any, idx: number) => (
-              <tr key={inv.id || idx} className="border-b border-slate-100/40 transition-colors duration-150 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20">
+              <tr key={inv.id || idx} className="border-b border-slate-100/40 transition-colors duration-150 hover:bg-slate-50 dark:border-slate-700/20 dark:hover:bg-slate-700/20">
                 <td className="px-6 py-3 text-sm text-slate-700 dark:text-slate-300">{inv.sender_name || inv.sender_site_id}</td>
                 <td className="px-6 py-3 text-sm text-slate-700 dark:text-slate-300">{inv.receiver_name || inv.receiver_site_id}</td>
                 <td className="px-6 py-3 text-sm text-right font-mono tabular-nums text-slate-700 dark:text-slate-300">{formatAmount(inv.amount)}</td>
@@ -136,9 +136,9 @@ function ReconciliationTab({ year, month }: { year: number; month: number }) {
   if (pairs.length === 0) return <EmptyState message={t('common.noData')} />;
 
   return (
-    <div className="glass-card overflow-hidden">
-      <div className="border-b border-white/10 px-6 py-4">
-        <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('ic.reconciliation')}</h2>
+    <div className="card overflow-hidden">
+      <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+        <h2 className="text-base font-semibold text-slate-900 dark:text-white">{t('ic.reconciliation')}</h2>
         <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">{year}-{String(month).padStart(2, '0')}</p>
       </div>
       <div className="overflow-x-auto">
@@ -162,10 +162,7 @@ function ReconciliationTab({ year, month }: { year: number; month: number }) {
                 <tr
                   key={pair.id || idx}
                   className={cn(
-                    'border-b transition-colors duration-150',
-                    isMatched
-                      ? 'bg-emerald-50/30 border-emerald-100/40 hover:bg-emerald-50/50 dark:bg-emerald-900/5 dark:border-emerald-900/20 dark:hover:bg-emerald-900/10'
-                      : 'bg-red-50/20 border-red-100/40 hover:bg-red-50/40 dark:bg-red-900/5 dark:border-red-900/20 dark:hover:bg-red-900/10'
+                    'border-b border-slate-50 transition-colors hover:bg-slate-50 dark:border-slate-700/20 dark:hover:bg-slate-700/20'
                   )}
                 >
                   <td className="px-6 py-3 text-sm text-slate-700 dark:text-slate-300">{pair.sender_name || pair.sender_site_id}</td>
@@ -195,9 +192,9 @@ function LoansTab() {
   if (items.length === 0) return <EmptyState message={t('common.noData')} />;
 
   return (
-    <div className="glass-card overflow-hidden">
-      <div className="border-b border-white/10 px-6 py-4">
-        <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('ic.loans')}</h2>
+    <div className="card overflow-hidden">
+      <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+        <h2 className="text-base font-semibold text-slate-900 dark:text-white">{t('ic.loans')}</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -213,7 +210,7 @@ function LoansTab() {
           </thead>
           <tbody>
             {items.map((loan: any, idx: number) => (
-              <tr key={loan.id || idx} className="border-b border-slate-100/40 transition-colors duration-150 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20">
+              <tr key={loan.id || idx} className="border-b border-slate-100/40 transition-colors duration-150 hover:bg-slate-50 dark:border-slate-700/20 dark:hover:bg-slate-700/20">
                 <td className="px-6 py-3 text-sm text-slate-700 dark:text-slate-300">{loan.lender_name || loan.lender_site_id}</td>
                 <td className="px-6 py-3 text-sm text-slate-700 dark:text-slate-300">{loan.borrower_name || loan.borrower_site_id}</td>
                 <td className="px-6 py-3 text-sm text-right font-mono tabular-nums text-slate-700 dark:text-slate-300">{formatAmount(loan.principal_amount ?? loan.amount ?? 0)}</td>
@@ -251,7 +248,7 @@ export function IntercompanyPage() {
   return (
     <div className="page-enter space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
           {t('ic.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -259,21 +256,15 @@ export function IntercompanyPage() {
         </p>
       </div>
 
-      <div className="segmented-control">
+      <div className="flex gap-6 border-b border-slate-200 mb-6">
         {TAB_DEFS.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={cn(
-              'inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all duration-200',
-              activeTab === tab.key
-                ? 'bg-white text-slate-900 shadow-sm dark:bg-slate-700 dark:text-white'
-                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+            className={cn('pb-3 text-sm font-medium border-b-2 -mb-px transition-colors',
+              activeTab === tab.key ? 'border-brand-500 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700'
             )}
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={tab.icon} />
-            </svg>
             {t(tab.labelKey)}
           </button>
         ))}

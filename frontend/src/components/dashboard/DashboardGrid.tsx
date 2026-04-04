@@ -23,12 +23,12 @@ function ChartCard({ title, subtitle, children, className = '' }: {
   title: string; subtitle?: string; children: React.ReactNode; className?: string;
 }) {
   return (
-    <div className={`glass-card overflow-hidden ${className}`}>
-      <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200/30 dark:border-slate-700/20">
+    <div className={`card overflow-hidden ${className}`}>
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200">
         <div className="flex items-baseline gap-2">
-          <h3 className="text-sm font-semibold font-display text-slate-800 dark:text-slate-200">{title}</h3>
+          <h3 className="text-sm font-semibold text-slate-800">{title}</h3>
           {subtitle && (
-            <span className="text-[11px] text-slate-400 dark:text-slate-500">{subtitle}</span>
+            <span className="text-[11px] text-slate-400">{subtitle}</span>
           )}
         </div>
       </div>
@@ -102,7 +102,7 @@ export function DashboardGrid() {
     return (
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="glass-card h-[340px] animate-pulse" />
+          <div key={i} className="card h-[340px] animate-pulse" />
         ))}
       </div>
     );
@@ -110,7 +110,7 @@ export function DashboardGrid() {
 
   if (!chartData) {
     return (
-      <div className="glass-card flex h-48 items-center justify-center">
+      <div className="card flex h-48 items-center justify-center">
         <p className="text-sm text-slate-400">No chart data available for this period</p>
       </div>
     );
@@ -119,7 +119,7 @@ export function DashboardGrid() {
   const show = (id: string) => visibleWidgets.includes(id);
 
   return (
-    <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 stagger-children">
+    <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
       {show('revenue-trend') && (
         <ChartCard title={t('chart.revenueTrend')} subtitle={t('chart.last6months')}>
           <FinancialLineChart data={chartData.revenueTrend} dataKey="value" xAxisKey="name" color="#3b82f6" />

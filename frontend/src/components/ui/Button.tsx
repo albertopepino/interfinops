@@ -1,19 +1,18 @@
 import { cn } from '@/utils/cn';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'accent' | 'ghost' | 'glass' | 'danger';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
 }
 
 export function Button({ variant = 'primary', size = 'md', loading, className, children, disabled, ...props }: ButtonProps) {
-  const sizes = { sm: 'px-3 py-1.5 text-xs', md: 'px-5 py-2.5 text-sm', lg: 'px-6 py-3 text-base' };
+  const sizes = { sm: 'px-3 py-1.5 text-xs', md: 'px-4 py-2 text-sm', lg: 'px-5 py-2.5 text-base' };
   const variants = {
     primary: 'btn-primary',
-    accent: 'btn-accent',
+    secondary: 'btn-secondary',
     ghost: 'btn-ghost',
-    glass: 'btn-glass',
-    danger: 'btn bg-gradient-to-b from-red-500 to-red-600 text-white px-5 py-2.5 shadow-lg shadow-red-500/20 hover:shadow-xl hover:brightness-110',
+    danger: 'btn bg-red-600 text-white px-4 py-2 hover:bg-red-700 shadow-sm',
   };
   return (
     <button className={cn(variants[variant], sizes[size], loading && 'opacity-70 pointer-events-none', className)} disabled={disabled || loading} {...props}>
