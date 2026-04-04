@@ -146,10 +146,10 @@ export function TargetsPage() {
   }, []);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
           {t('targets.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -247,11 +247,11 @@ export function TargetsPage() {
             const kpis = kpisByCategory[category];
             const colors = CATEGORY_COLORS[category];
             return (
-              <div key={category} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+              <div key={category} className="glass-card overflow-hidden">
                 {/* Category Header */}
                 <div className={`flex items-center gap-2 px-5 py-3 ${colors.bg} border-b ${colors.border}`}>
                   <div className={`h-2.5 w-2.5 rounded-full ${colors.dot}`} />
-                  <h3 className={`text-sm font-semibold ${colors.text}`}>{category}</h3>
+                  <h3 className={`text-sm font-semibold font-display ${colors.text}`}>{category}</h3>
                   <span className="text-xs text-slate-400 dark:text-slate-500">({kpis.length} KPIs)</span>
                 </div>
 
@@ -282,7 +282,7 @@ export function TargetsPage() {
                               </span>
                             </td>
                             <td className="px-5 py-3.5 text-right">
-                              <span className="text-sm tabular-nums text-slate-600 dark:text-slate-400">
+                              <span className="text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
                                 {formatKPIValue(currentValue, kpi.name)}
                               </span>
                             </td>
@@ -293,29 +293,26 @@ export function TargetsPage() {
                                 value={targetVal}
                                 onChange={(e) => handleTargetChange(kpi.name, e.target.value)}
                                 placeholder="--"
-                                className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-right text-sm tabular-nums text-slate-700 shadow-sm transition-colors placeholder:text-slate-300 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 dark:placeholder:text-slate-600"
+                                className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-right text-sm font-mono tabular-nums text-slate-700 shadow-sm transition-all placeholder:text-slate-300 focus:border-[#1a6fb5] focus:ring-2 focus:ring-[#1a6fb5]/20 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 dark:placeholder:text-slate-600"
                               />
                             </td>
                             <td className="px-5 py-3.5">
                               <div className="flex justify-center">
                                 {status === 'on-track' && (
-                                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                    </svg>
+                                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                                     {t('targets.onTrack')}
                                   </span>
                                 )}
                                 {status === 'below-target' && (
-                                  <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400">
-                                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                    </svg>
+                                  <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-600 dark:text-red-400">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
                                     {t('targets.belowTarget')}
                                   </span>
                                 )}
                                 {status === 'no-data' && (
-                                  <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-400 dark:bg-slate-700 dark:text-slate-500">
+                                  <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-500/10 px-3 py-1 text-xs font-semibold text-slate-400 dark:text-slate-500">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
                                     --
                                   </span>
                                 )}

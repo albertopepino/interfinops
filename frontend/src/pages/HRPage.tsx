@@ -58,9 +58,9 @@ function EmptyState({ message }: { message: string }) {
 
 function KPICard({ label, value, color }: { label: string; value: string | number; color: string }) {
   return (
-    <div className="rounded-xl border border-slate-200/60 bg-white/70 p-5 shadow-sm backdrop-blur dark:border-slate-700/60 dark:bg-slate-800/70">
-      <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">{label}</p>
-      <p className={`mt-2 text-2xl font-bold tabular-nums ${color}`}>{value}</p>
+    <div className="glass-card p-5 transition-all duration-300 hover:scale-[1.02] hover:shadow-card-hover">
+      <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">{label}</p>
+      <p className={`mt-2 text-2xl font-bold font-display tabular-nums ${color}`}>{value}</p>
     </div>
   );
 }
@@ -106,14 +106,16 @@ function HeadcountTab({ siteId }: { siteId: string | null }) {
       )}
 
       {/* Employee table grouped by department */}
-      {deptList.map((dept: any) => {
+      {deptList.map((dept: any, deptIdx: number) => {
         const deptName = dept.name || dept.department || 'Unassigned';
         const deptEmployees = dept.employees || byDept[deptName] || [];
         return (
-          <div key={deptName} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
-            <div className="flex items-center gap-2 border-b border-slate-100 bg-slate-50/50 px-5 py-3 dark:border-slate-700 dark:bg-slate-800/80">
+          <div key={deptName} className="glass-card overflow-hidden opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]"
+            style={{ animationDelay: `${deptIdx * 60}ms`, animationFillMode: 'backwards' }}
+          >
+            <div className="flex items-center gap-2 border-b border-white/10 px-5 py-3">
               <div className="h-2.5 w-2.5 rounded-full bg-blue-500" />
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">{deptName}</h3>
+              <h3 className="text-sm font-semibold font-display text-slate-700 dark:text-slate-300">{deptName}</h3>
               <span className="text-xs text-slate-400">({deptEmployees.length})</span>
             </div>
             <div className="overflow-x-auto">
@@ -132,7 +134,7 @@ function HeadcountTab({ siteId }: { siteId: string | null }) {
                     const typeKey = emp.employment_type || 'full_time';
                     const typeColors = EMPLOYMENT_TYPE_COLORS[typeKey] || EMPLOYMENT_TYPE_COLORS.full_time;
                     return (
-                      <tr key={emp.id || idx} className="transition-colors hover:bg-slate-50/50 dark:hover:bg-slate-700/20">
+                      <tr key={emp.id || idx} className="border-b border-slate-100/40 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20 transition-colors duration-150 opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]" style={{ animationDelay: `${idx * 40}ms`, animationFillMode: 'backwards' }}>
                         <td className="px-5 py-3 text-sm font-medium text-slate-800 dark:text-slate-200">
                           {emp.full_name || emp.name || '--'}
                         </td>
@@ -140,11 +142,12 @@ function HeadcountTab({ siteId }: { siteId: string | null }) {
                           {emp.position || emp.job_title || '--'}
                         </td>
                         <td className="px-5 py-3">
-                          <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${typeColors.bg} ${typeColors.text}`}>
+                          <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${typeColors.bg} ${typeColors.text}`}>
+                            <span className={`h-1.5 w-1.5 rounded-full ${typeKey === 'full_time' ? 'bg-blue-500' : typeKey === 'part_time' ? 'bg-amber-500' : typeKey === 'contractor' ? 'bg-violet-500' : 'bg-cyan-500'}`} />
                             {typeKey.replace(/_/g, ' ')}
                           </span>
                         </td>
-                        <td className="px-5 py-3 text-right text-sm tabular-nums text-slate-600 dark:text-slate-400">
+                        <td className="px-5 py-3 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
                           {emp.fte != null ? Number(emp.fte).toFixed(2) : '--'}
                         </td>
                         <td className="px-5 py-3 text-sm text-slate-600 dark:text-slate-400">
@@ -195,10 +198,10 @@ function PayrollTab({ siteId, year, month }: { siteId: string | null; year: numb
       )}
 
       {/* Department / Site table */}
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
-        <div className="flex items-center gap-2 border-b border-slate-100 bg-slate-50/50 px-5 py-3 dark:border-slate-700 dark:bg-slate-800/80">
+      <div className="glass-card overflow-hidden">
+        <div className="flex items-center gap-2 border-b border-white/10 px-5 py-3">
           <div className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+          <h3 className="text-sm font-semibold font-display text-slate-700 dark:text-slate-300">
             {isConsolidated ? 'By Site' : `By ${t('hr.department')}`}
           </h3>
           {isConsolidated && (
@@ -230,19 +233,19 @@ function PayrollTab({ siteId, year, month }: { siteId: string | null; year: numb
                       <span className="ml-2 text-[10px] text-slate-400">({row.currency})</span>
                     )}
                   </td>
-                  <td className="px-5 py-3.5 text-right text-sm tabular-nums text-slate-600 dark:text-slate-400">
+                  <td className="px-5 py-3.5 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
                     {row.headcount ?? '--'}
                   </td>
-                  <td className="px-5 py-3.5 text-right text-sm tabular-nums text-slate-600 dark:text-slate-400">
+                  <td className="px-5 py-3.5 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
                     {formatCurrency(row.total_gross)}
                   </td>
-                  <td className="px-5 py-3.5 text-right text-sm tabular-nums text-slate-600 dark:text-slate-400">
+                  <td className="px-5 py-3.5 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
                     {formatCurrency(row.total_net)}
                   </td>
-                  <td className="px-5 py-3.5 text-right text-sm tabular-nums text-slate-600 dark:text-slate-400">
+                  <td className="px-5 py-3.5 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
                     {formatCurrency(row.total_cost ?? row.total_employer_cost)}
                   </td>
-                  <td className="px-5 py-3.5 text-right text-sm tabular-nums text-slate-600 dark:text-slate-400">
+                  <td className="px-5 py-3.5 text-right text-sm font-mono tabular-nums text-slate-600 dark:text-slate-400">
                     {formatCurrency(row.avg_salary)}
                   </td>
                 </tr>
@@ -294,8 +297,8 @@ function UploadTab() {
 
   return (
     <div className="space-y-6">
-      <div className="max-w-2xl rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-        <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">{t('hr.upload')}</h3>
+      <div className="max-w-2xl glass-card p-6">
+        <h3 className="text-lg font-semibold font-display text-slate-800 dark:text-slate-200">{t('hr.upload')}</h3>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
           Upload a CSV file with salary records for a specific site.
         </p>
@@ -415,10 +418,10 @@ export function HRPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
           {t('hr.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -427,21 +430,18 @@ export function HRPage() {
       </div>
 
       {/* Tab bar */}
-      <div className="flex items-center gap-6 border-b border-slate-200 dark:border-slate-700">
+      <div className="flex gap-2">
         {TABS.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`relative pb-3 text-sm font-medium transition-colors ${
+            className={`rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
               activeTab === tab
-                ? 'text-brand-600 dark:text-brand-400'
-                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+                ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
+                : 'glass-card !rounded-xl text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
             }`}
           >
             {tabLabels[tab]}
-            {activeTab === tab && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-brand-600 dark:bg-brand-400" />
-            )}
           </button>
         ))}
       </div>

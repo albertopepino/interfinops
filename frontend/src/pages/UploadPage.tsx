@@ -26,10 +26,10 @@ export function UploadPage() {
   const { data: history, isLoading: historyLoading } = useUploadHistory(selectedSiteId || '');
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
           {t('upload.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -44,7 +44,7 @@ export function UploadPage() {
 
       {/* Upload history */}
       <div>
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+        <h2 className="text-lg font-semibold font-display text-slate-900 dark:text-white mb-4">
           {t('upload.history')}
         </h2>
 
@@ -63,7 +63,7 @@ export function UploadPage() {
             </div>
           </Card>
         ) : (
-          <div className="overflow-hidden rounded-lg border bg-white dark:bg-slate-800 dark:border-slate-700">
+          <div className="glass-card overflow-hidden">
             <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
               <thead>
                 <tr className="bg-slate-50 dark:bg-slate-900">

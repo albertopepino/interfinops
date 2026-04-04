@@ -82,7 +82,7 @@ function InvoicesTab({ siteId }: { siteId: string | null }) {
   return (
     <div className="glass-card overflow-hidden animate-in">
       <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('ic.invoices')}</h2>
+        <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('ic.invoices')}</h2>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
@@ -108,7 +108,7 @@ function InvoicesTab({ siteId }: { siteId: string | null }) {
           </thead>
           <tbody>
             {items.map((inv: any, idx: number) => (
-              <tr key={inv.id || idx} className="border-b border-slate-100/40 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20 transition-colors duration-150">
+              <tr key={inv.id || idx} className="border-b border-slate-100/40 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20 transition-colors duration-150 opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]" style={{ animationDelay: `${idx * 40}ms`, animationFillMode: 'backwards' }}>
                 <td className="px-6 py-3 text-sm text-slate-700 dark:text-slate-300">{inv.sender_name || inv.sender_site_id}</td>
                 <td className="px-6 py-3 text-sm text-slate-700 dark:text-slate-300">{inv.receiver_name || inv.receiver_site_id}</td>
                 <td className="px-6 py-3 text-sm text-right font-mono tabular-nums text-slate-700 dark:text-slate-300">{formatAmount(inv.amount)}</td>
@@ -135,7 +135,7 @@ function ReconciliationTab({ year, month }: { year: number; month: number }) {
   return (
     <div className="glass-card overflow-hidden animate-in">
       <div className="border-b border-white/10 px-6 py-4">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('ic.reconciliation')}</h2>
+        <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('ic.reconciliation')}</h2>
         <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">{year}-{String(month).padStart(2, '0')}</p>
       </div>
       <div className="overflow-x-auto">
@@ -154,7 +154,7 @@ function ReconciliationTab({ year, month }: { year: number; month: number }) {
             {pairs.map((pair: any, idx: number) => {
               const diff = (pair.sender_amount ?? 0) - (pair.receiver_amount ?? 0);
               return (
-                <tr key={pair.id || idx} className="border-b border-slate-100/40 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20 transition-colors duration-150">
+                <tr key={pair.id || idx} className="border-b border-slate-100/40 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20 transition-colors duration-150 opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]" style={{ animationDelay: `${idx * 40}ms`, animationFillMode: 'backwards' }}>
                   <td className="px-6 py-3 text-sm text-slate-700 dark:text-slate-300">{pair.sender_name || pair.sender_site_id}</td>
                   <td className="px-6 py-3 text-sm text-slate-700 dark:text-slate-300">{pair.receiver_name || pair.receiver_site_id}</td>
                   <td className="px-6 py-3 text-sm text-right font-mono tabular-nums text-slate-700 dark:text-slate-300">{formatAmount(pair.sender_amount ?? 0)}</td>
@@ -184,7 +184,7 @@ function LoansTab() {
   return (
     <div className="glass-card overflow-hidden animate-in">
       <div className="border-b border-white/10 px-6 py-4">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('ic.loans')}</h2>
+        <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">{t('ic.loans')}</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -200,7 +200,7 @@ function LoansTab() {
           </thead>
           <tbody>
             {items.map((loan: any, idx: number) => (
-              <tr key={loan.id || idx} className="border-b border-slate-100/40 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20 transition-colors duration-150">
+              <tr key={loan.id || idx} className="border-b border-slate-100/40 hover:bg-blue-50/30 dark:border-slate-700/20 dark:hover:bg-slate-700/20 transition-colors duration-150 opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]" style={{ animationDelay: `${idx * 40}ms`, animationFillMode: 'backwards' }}>
                 <td className="px-6 py-3 text-sm text-slate-700 dark:text-slate-300">{loan.lender_name || loan.lender_site_id}</td>
                 <td className="px-6 py-3 text-sm text-slate-700 dark:text-slate-300">{loan.borrower_name || loan.borrower_site_id}</td>
                 <td className="px-6 py-3 text-sm text-right font-mono tabular-nums text-slate-700 dark:text-slate-300">{formatAmount(loan.principal_amount ?? loan.amount ?? 0)}</td>
@@ -238,7 +238,7 @@ export function IntercompanyPage() {
   return (
     <div className="space-y-6 animate-in">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
           {t('ic.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">

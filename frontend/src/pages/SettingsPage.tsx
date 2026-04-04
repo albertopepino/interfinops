@@ -12,10 +12,10 @@ export function SettingsPage() {
   const { theme, setTheme, currencyMode, setCurrencyMode } = useDashboardStore();
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-6 max-w-3xl animate-in">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
           {t('settings.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">

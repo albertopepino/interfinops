@@ -82,10 +82,10 @@ export function ChartOfAccountsPage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-in">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-2xl font-bold tracking-tight font-display text-slate-900 dark:text-white">
           {t('accounts.title')}
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -94,15 +94,15 @@ export function ChartOfAccountsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 rounded-xl bg-slate-100 p-1 dark:bg-slate-800">
+      <div className="flex gap-2">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+            className={`rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
               activeTab === tab.key
-                ? 'bg-white text-slate-900 shadow-sm dark:bg-slate-700 dark:text-white'
-                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+                ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
+                : 'glass-card !rounded-xl text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
             }`}
           >
             {tab.label}
@@ -213,10 +213,10 @@ function GroupAccountsTab() {
       {sections.map((section) => {
         const colors = ACCOUNT_TYPE_COLORS[section.type] || { bg: 'bg-slate-50', text: 'text-slate-600' };
         return (
-          <div key={section.type} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+          <div key={section.type} className="glass-card overflow-hidden">
             {/* Section Header */}
             <div className={`flex items-center gap-2 px-5 py-3 ${colors.bg} border-b border-slate-200 dark:border-slate-700`}>
-              <h3 className={`text-sm font-semibold capitalize ${colors.text}`}>{section.type}</h3>
+              <h3 className={`text-sm font-semibold font-display capitalize ${colors.text}`}>{section.type}</h3>
               <span className="text-xs text-slate-400 dark:text-slate-500">
                 ({section.accounts.length} accounts)
               </span>
@@ -418,9 +418,9 @@ function SiteAccountsTab() {
       {siteId && !isLoading && sections.map((section) => {
         const colors = ACCOUNT_TYPE_COLORS[section.type] || { bg: 'bg-slate-50', text: 'text-slate-600' };
         return (
-          <div key={section.type} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+          <div key={section.type} className="glass-card overflow-hidden">
             <div className={`flex items-center gap-2 px-5 py-3 ${colors.bg} border-b border-slate-200 dark:border-slate-700`}>
-              <h3 className={`text-sm font-semibold capitalize ${colors.text}`}>{section.type}</h3>
+              <h3 className={`text-sm font-semibold font-display capitalize ${colors.text}`}>{section.type}</h3>
               <span className="text-xs text-slate-400 dark:text-slate-500">
                 ({section.accounts.length} accounts)
               </span>
@@ -628,7 +628,7 @@ function MappingMatrixTab() {
 
       {/* Mapping Matrix Table -- Group accounts as rows, site accounts as dropdown options */}
       {siteId && groupAccounts && !mappingLoading && (
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+        <div className="glass-card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -705,17 +705,13 @@ function MappingMatrixTab() {
                       </td>
                       <td className="px-5 py-3 text-center">
                         {isMapped ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
-                            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                             {t('accounts.mapped')}
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400">
-                            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-600 dark:text-red-400">
+                            <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
                             {t('accounts.unmapped')}
                           </span>
                         )}
